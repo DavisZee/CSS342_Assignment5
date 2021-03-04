@@ -14,6 +14,10 @@ void test1() {
     cout << "Hello" << endl;
 }
 
+void test2() {
+    
+}
+
 int main() {
     test1();
     

@@ -18,44 +18,45 @@ ostream& operator<<(ostream& out, const BSTree& tree) {
 // LeafNode Public:
 
 // constructor
-LeafNode::LeafNode() {
+LeafNode::LeafNode() : leftChild{nullptr}, rightChild{nullptr} {}
 
-}
+// constructor with data input
+LeafNode::LeafNode(const int& newData) : data{newData}, leftChild{nullptr}, 
+    rightChild{nullptr} 
+{}
 
-LeafNode::LeafNode(const int& data) {
+//constructure with all variables argument
+LeafNode::LeafNode(const int& newData, LeafNode* leftPtr, LeafNode* rightPtr) : 
+    data{newData}, leftChild{leftPtr}, rightChild{rightPtr} 
+{}
 
-}
 
-LeafNode::LeafNode(const int& data, LeafNode* leftPtr, LeafNode* rightPt) {
-
-}
-
-void LeafNode::setData(const int& data) {
-
+void LeafNode::setData(const int& newData) {
+    data = newData;
 }
 
 int LeafNode::getData() {
-    return 0;
+    return data;
 }
 
 bool LeafNode::isLeafNode() const {
     return true;
 }
 
-auto LeafNode::getLeftLeafPtr() const {
-
+auto LeafNode::getLeftChildPtr() const {
+    return leftChild;
 }
 
-auto LeafNode::getRightLeafPtr() const {
-
+auto LeafNode::getRightChildPtr() const {
+    return rightChild;
 }
 
-void LeafNode::setLeftLeaf(LeafNode* leftLeaf) {
-
+void LeafNode::setLeftChild(LeafNode* leftLeaf) {
+    leftChild = leftLeaf;
 }
 
-void LeafNode::setRightLeaf(LeafNode* rightLeaf) {
-
+void LeafNode::setRightChild(LeafNode* rightLeaf) {
+    rightChild = rightLeaf;
 }
 
 //BSTree protected
@@ -69,10 +70,12 @@ int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
 }
 
 auto BSTree::balancedAdd(LeafNode* subTreePtr, LeafNode* newNodePtr) {
+    // maybe check and set leafState in this method
 	return;
 }
 
 bool BSTree::removeValue(LeafNode* subTreePtr, const int target) {
+    // careful of mem leak
 	return true;
 }
 
@@ -89,6 +92,7 @@ bool BSTree::copyTree(const LeafNode* oldTreeRootPtr) const {
 	return true;
 }
 
+//destroys all nodes in the tree and makes sure there is no mem leak
 void BSTree::burnTheTree(LeafNode* subTreePtr) {
 
 }
@@ -127,8 +131,9 @@ BSTree::~BSTree() {
 
 }
 
+//
 bool BSTree::isEmpty() const {
-	return true;
+	return rootPtr == nullptr; // if root is nullptr then tree is empty
 }
 
 int BSTree::getHeight() const {
@@ -140,23 +145,32 @@ int BSTree::getNumOfNodes() const {
 }
 
 int BSTree::getRootData() const {
-	return 0;
+	return rootPtr->data;
 }
 
 void BSTree::setRootData(const int newData) {
-
+    rootPtr->data = newData;
 }
 
 bool BSTree::add(const int newData) {
+    LeafNode* tempNode = new LeafNode(newData); // start by creating a new ptr
+    // should check and set leafState in this method
+    // if tree is empty then set it as the root
+    // 
+    // if node is now a leaf then turn into a threaded node
+    // clear and delete all pointer variables created
+    tempNode = nullptr;
+    delete tempNode;
 	return true;
 }
 
 bool BSTree::remove(const int data) {
+    // careful of mem leak here
 	return true;
 }
 
 void BSTree::clear() {
-
+    
 }
 
 int BSTree::getEntry(const int anEntry) {

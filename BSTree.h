@@ -48,11 +48,11 @@ public:
   bool isLeafNode() const;
 
   // setters and getters for child pointers
-  auto getLeftLeafPtr() const;
-  auto getRightLeafPtr() const;
+  auto getLeftChildPtr() const;
+  auto getRightChildPtr() const;
 
-  void setLeftLeaf(LeafNode* leftLeaf);
-  void setRightLeaf(LeafNode* rightLeaf);
+  void setLeftChild(LeafNode* leftLeaf);
+  void setRightChild(LeafNode* rightLeaf);
 
 }; // end of LeafNode
 
@@ -77,12 +77,12 @@ protected:
   // in the book. Changed to bool return type
   bool removeValue(LeafNode* subTreePtr, const int target);
 
-  // copies values up tree to overwrite value in current node until a leaf is 
-  // reached. The leaf is then removed since its value is stored in the parent
+  // copies values up tree to overwrite value in current node until a node is 
+  // reached. The node is then removed since its value is stored in the parent
   auto moveValuesUpTree(LeafNode* subTreePtr);
 
   // recursively searches for target value, returns nullptr if not found.
-  // changed from auto to leaf pointer
+  // changed from auto to node pointer
   LeafNode* findNode(LeafNode* treePtr, const int target) const;
 
   // copies the tree rooted at treePtr and returns a pointer to the root of
