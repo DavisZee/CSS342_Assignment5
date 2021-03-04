@@ -62,7 +62,7 @@ void LeafNode::setRightChild(LeafNode* rightLeaf) {
 //BSTree protected
 
 int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
-    if (subTreePtr == nullptr) return -1;
+    if (subTreePtr == nullptr) return 0;
     
     int leftHeight = getHeightHelper(subTreePtr->leftChild);
     int rightHeight = getHeightHelper(subTreePtr->rightChild);
