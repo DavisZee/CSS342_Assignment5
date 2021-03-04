@@ -40,7 +40,7 @@ int LeafNode::getData() {
 }
 
 bool LeafNode::isLeafNode() const {
-    return true;
+    return (leftChild == nullptr && rightChild == nullptr);
 }
 
 auto LeafNode::getLeftChildPtr() const {
@@ -62,11 +62,26 @@ void LeafNode::setRightChild(LeafNode* rightLeaf) {
 //BSTree protected
 
 int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
-	return 0;
+    if (subTreePtr == nullptr) return -1;
+    
+    int leftHeight = getHeightHelper(subTreePtr->leftChild);
+    int rightHeight = getHeightHelper(subTreePtr->rightChild);
+
+
+    //returns the max of leftHeight and rightHeight (+ 1 to account for itself)
+    return (leftHeight < rightHeight) ? rightHeight + 1: leftHeight + 1;
 }
 
 int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
-	return 0;
+    if (subTreePtr == nullptr) return 0;
+    int counter = 0;
+    //Recursively traverse tree going left then right if have those children
+    
+    counter += getNumOfNodesHelper(subTreePtr->leftChild);
+    counter += getNumOfNodesHelper(subTreePtr->rightChild);
+  
+    //Return the count (+1 to account for itself)
+    return counter + 1;
 }
 
 auto BSTree::balancedAdd(LeafNode* subTreePtr, LeafNode* newNodePtr) {
@@ -112,18 +127,39 @@ void BSTree::postorder(void visit(int), LeafNode* treePtr) {
 //BSTree public
 
 BSTree::BSTree() {
-
+    //In the case of empty, root will be null
+    rootPtr = nullptr;
 }
 
 BSTree::BSTree(const int data) {
-
+    //When call BSTree with only one parameter then set root to that data
+    rootPtr->data = data;
+    rootPtr->leftChild = nullptr;
+    rootPtr->rightChild = nullptr;
+    //Currently it is a leaf so set that to true
+    rootPtr->leafState = true; 
 }
 
 BSTree::BSTree(const int data, BSTree* leftTreePtr, BSTree* rightTreePtr) {
+    //Initially set root to data
+    rootPtr->data = data;
+    //Create leafNode to traverse BStrees
+    //Start with left tree 
+    LeafNode* rootTemp = rootPtr;
+    LeafNode* leftTemp = leftTreePtr->rootPtr;
+    LeafNode* rightTemp = rightTreePtr->rootPtr;
+    rootPtr->leftChild = leftTemp;
+    rootPtr->rightChild = rightTemp;
+    //Move to left child
+    rootPtr = rootPtr->leftChild;
+    
+    //At this point we want to traverse entire left and right BSTrees recursively
+    //and copy all their elements into root.
 
 }
 
 BSTree::BSTree(const BSTree* aTree) {
+    
 
 }
 
