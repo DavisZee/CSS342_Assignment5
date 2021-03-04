@@ -132,12 +132,15 @@ BSTree::BSTree() {
 }
 
 BSTree::BSTree(const int data) {
-    //When call BSTree with only one parameter then set root to that data
-    rootPtr->data = data;
-    rootPtr->leftChild = nullptr;
-    rootPtr->rightChild = nullptr;
-    //Currently it is a leaf so set that to true
-    rootPtr->leafState = true; 
+    ////When call BSTree with only one parameter then set root to that data
+    //rootPtr->data = data;
+    //rootPtr->leftChild = nullptr;
+    //rootPtr->rightChild = nullptr;
+    ////Currently it is a leaf so set that to true
+    //rootPtr->leafState = true; 
+    
+
+    //This method will add all values from 1 - data into BSTree
 }
 
 BSTree::BSTree(const int data, BSTree* leftTreePtr, BSTree* rightTreePtr) {
