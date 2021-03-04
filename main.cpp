@@ -32,7 +32,8 @@ void test2() {
 int main() {
     cout << "Begin Testing!" << endl << endl;
     // test1();
-    int a = 5;
+    //int a = 5;
+
     cout << "Done!" << endl;
     return 0;
 }
