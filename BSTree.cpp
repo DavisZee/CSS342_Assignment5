@@ -40,7 +40,7 @@ int LeafNode::getData() {
 }
 
 bool LeafNode::isLeafNode() const {
-    return (leftChild == nullptr && rightChild == nullptr);
+    return (leafState == true);
 }
 
 auto LeafNode::getLeftChildPtr() const {
@@ -141,6 +141,8 @@ BSTree::BSTree(const int data) {
     
 
     //This method will add all values from 1 - data into BSTree
+
+
 }
 
 BSTree::BSTree(const int data, BSTree* leftTreePtr, BSTree* rightTreePtr) {
