@@ -1,6 +1,7 @@
 /*
  * Created on 02/26/2021
  * Modified by Davis Zhong on 02/26/2021
+ * Modified by Affan Dhankwala on 3/3/2021
  * 
 */
 #ifndef BSTREE_H
@@ -25,6 +26,9 @@ private:
 
   // data contained in the object
   int data{0};
+  // state of if this node is a leaf node or not
+  // if it is a leaf node then it will be true, otherwise false
+ bool leafState;
 
   // child nodes
   LeafNode* leftChild;
@@ -40,7 +44,7 @@ public:
   void setData(const int& data);
   int getData();
 
-  // not sure what this one does yet
+  // checks if the node has any children nodes
   bool isLeafNode() const;
 
   // setters and getters for child pointers

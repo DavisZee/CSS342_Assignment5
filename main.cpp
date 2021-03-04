@@ -4,6 +4,7 @@
  * 
 */
 
+// should test for duplicates because duplicates not allowed
 #include <iostream>
 using namespace std;
 
