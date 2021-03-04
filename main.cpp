@@ -4,7 +4,6 @@
  * 
 */
 
-
 // should test for duplicates because duplicates not allowed
 #include <iostream>
 #include "BSTree.h"
