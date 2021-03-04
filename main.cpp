@@ -6,6 +6,7 @@
 
 // should test for duplicates because duplicates not allowed
 #include <iostream>
+#include "BSTree.h"
 using namespace std;
 
 void test1() {

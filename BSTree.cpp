@@ -35,7 +35,7 @@ void LeafNode::setData(const int& data) {
 }
 
 int LeafNode::getData() {
-
+    return 0;
 }
 
 bool LeafNode::isLeafNode() const {
@@ -180,5 +180,5 @@ void BSTree::postorderTrav(void visit(int&)) const {
 }
 
 BSTree& BSTree::operator= (const BSTree& rightHandSIde) {
-
+    return *this;
 }
