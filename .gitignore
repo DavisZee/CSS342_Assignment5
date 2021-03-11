@@ -5,3 +5,5 @@
 /.vs
 /Ass5.vcxproj.user
 a.exe
+/x64/Debug/Ass5.tlog
+/x64/Debug
