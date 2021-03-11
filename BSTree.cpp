@@ -177,7 +177,7 @@ LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
     int mid = (start + end) / 2;
 
     //Assign root as middle pointer
-    LeafNode* midNode = new LeafNode(arr[mid]);
+    LeafNode* midNode = new LeafNode(arr[mid - 1]);
 
     //Recursively link left and right sides
     midNode->leftChild = sortedArrToTree(arr, start, mid - 1);
