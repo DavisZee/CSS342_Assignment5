@@ -163,8 +163,8 @@ BSTree::BSTree(const int data) {
    //This method will add all values from 1 - data into BSTree
     int temp = data;
     int* values = new int[data];
-    for (int i = 1; i <= data; i++) {
-        values[i] = i;
+    for (int i = 0; i < data; i++) {
+        values[i] = i + 1;
     }
     rootPtr = sortedArrToTree(values, 1, data);
 
