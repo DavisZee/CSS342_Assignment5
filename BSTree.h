@@ -64,6 +64,9 @@ private:
   // pointer to the root of the BSTree
   LeafNode* rootPtr;
 
+  // Helpert to convert a sorted array into a tree
+  LeafNode* sortedArrToTree(int arr[], int start, int end);
+
 protected:
   // helper methods
   int getHeightHelper (LeafNode* subTreePtr) const;
@@ -71,7 +74,7 @@ protected:
 
   // Recursively adds nodes left then right to keeps tree balanced, this is 
   // an unnecessarry method, does not need to be implemented
-  auto balancedAdd(LeafNode* subTreePtr, LeafNode* newNodePtr);
+  LeafNode* balancedAdd(LeafNode* subTreePtr, LeafNode* newNodePtr);
 
   // removes target value from tree, supposed to be virtual auto return type
   // in the book. Changed to bool return type
@@ -87,7 +90,7 @@ protected:
 
   // copies the tree rooted at treePtr and returns a pointer to the root of
   // the copy. Changed from auto to bool
-  bool copyTree(const LeafNode* oldTreeRootPtr) const;
+  LeafNode* copyTree( LeafNode* oldTreeRootPtr);
 
   // recursively deletes all nodes from tree
   void burnTheTree(LeafNode* subTreePtr);

@@ -40,7 +40,7 @@ int LeafNode::getData() {
 }
 
 bool LeafNode::isLeafNode() const {
-    return (leftChild == nullptr && rightChild == nullptr);
+    return (leafState == true);
 }
 
 auto LeafNode::getLeftChildPtr() const {
@@ -62,7 +62,7 @@ void LeafNode::setRightChild(LeafNode* rightLeaf) {
 //BSTree protected
 
 int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
-    if (subTreePtr == nullptr) return -1;
+    if (subTreePtr == nullptr) return 0;
     
     int leftHeight = getHeightHelper(subTreePtr->leftChild);
     int rightHeight = getHeightHelper(subTreePtr->rightChild);
@@ -84,9 +84,30 @@ int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
     return counter + 1;
 }
 
-auto BSTree::balancedAdd(LeafNode* subTreePtr, LeafNode* newNodePtr) {
-    // maybe check and set leafState in this method
-	return;
+LeafNode* BSTree::balancedAdd(LeafNode* subTreePtr, LeafNode* newNodePtr) {
+    // maybe check and set leafState in this metho
+    
+    if (subTreePtr == nullptr) {
+        newNodePtr->leafState = true;
+        return newNodePtr;
+    }
+   
+    else if (subTreePtr->data > newNodePtr->data) {
+        subTreePtr->leafState = false;
+        subTreePtr->leftChild = balancedAdd(subTreePtr->leftChild, newNodePtr);
+        if (subTreePtr->leftChild == nullptr) return nullptr;
+    }
+    else if (subTreePtr->data < newNodePtr->data) {
+        subTreePtr->leafState = false;
+        subTreePtr->rightChild = balancedAdd(subTreePtr->rightChild, newNodePtr);
+        if (subTreePtr->rightChild == nullptr) return nullptr;
+    }
+    //Want to make sure duplicates are not stored
+    else if (subTreePtr->data == newNodePtr->data) {
+        return nullptr;
+    }
+    return subTreePtr;
+    
 }
 
 bool BSTree::removeValue(LeafNode* subTreePtr, const int target) {
@@ -103,8 +124,15 @@ LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
 	return lf;
 }
 
-bool BSTree::copyTree(const LeafNode* oldTreeRootPtr) const {
-	return true;
+LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
+    if (oldTreeRootPtr == nullptr) return nullptr;
+    LeafNode* temp = new LeafNode();
+    temp = oldTreeRootPtr;
+    
+    temp->leftChild = copyTree(oldTreeRootPtr->leftChild);
+    temp->rightChild = copyTree(oldTreeRootPtr->rightChild);
+    
+    return oldTreeRootPtr;
 }
 
 //destroys all nodes in the tree and makes sure there is no mem leak
@@ -132,37 +160,43 @@ BSTree::BSTree() {
 }
 
 BSTree::BSTree(const int data) {
-    ////When call BSTree with only one parameter then set root to that data
-    //rootPtr->data = data;
-    //rootPtr->leftChild = nullptr;
-    //rootPtr->rightChild = nullptr;
-    ////Currently it is a leaf so set that to true
-    //rootPtr->leafState = true; 
-    
+   //This method will add all values from 1 - data into BSTree
+    int temp = data;
+    int* values = new int[data];
+    for (int i = 0; i < data; i++) {
+        values[i] = i + 1;
+    }
+    rootPtr = sortedArrToTree(values, 1, data);
 
-    //This method will add all values from 1 - data into BSTree
+    delete[] values;
+}
+LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
+
+    if (start > end) return NULL;
+
+    int mid = (start + end) / 2;
+
+    //Assign root as middle pointer
+    LeafNode* midNode = new LeafNode(arr[mid - 1]);
+
+    //Recursively link left and right sides
+    midNode->leftChild = sortedArrToTree(arr, start, mid - 1);
+
+    //Recursively link right side
+    midNode->rightChild = sortedArrToTree(arr, mid + 1, end);   
+
+    return midNode;
 }
 
 BSTree::BSTree(const int data, BSTree* leftTreePtr, BSTree* rightTreePtr) {
-    //Initially set root to data
     rootPtr->data = data;
-    //Create leafNode to traverse BStrees
-    //Start with left tree 
-    LeafNode* rootTemp = rootPtr;
-    LeafNode* leftTemp = leftTreePtr->rootPtr;
-    LeafNode* rightTemp = rightTreePtr->rootPtr;
-    rootPtr->leftChild = leftTemp;
-    rootPtr->rightChild = rightTemp;
-    //Move to left child
-    rootPtr = rootPtr->leftChild;
-    
-    //At this point we want to traverse entire left and right BSTrees recursively
-    //and copy all their elements into root.
-
+    rootPtr->leftChild = copyTree(leftTreePtr->rootPtr);
+    rootPtr->rightChild = copyTree(rightTreePtr->rootPtr);
 }
 
 BSTree::BSTree(const BSTree* aTree) {
     
+    rootPtr = copyTree(aTree->rootPtr);
 
 }
 
@@ -176,11 +210,11 @@ bool BSTree::isEmpty() const {
 }
 
 int BSTree::getHeight() const {
-	return 0;
+    return getHeightHelper(rootPtr);
 }
 
 int BSTree::getNumOfNodes() const {
-	return 0;
+    return getNumOfNodesHelper(rootPtr);
 }
 
 int BSTree::getRootData() const {
@@ -198,6 +232,20 @@ bool BSTree::add(const int newData) {
     // 
     // if node is now a leaf then turn into a threaded node
     // clear and delete all pointer variables created
+    
+    //Point tempNode to rootPtr
+    if (rootPtr == nullptr) {
+        //This is the only node so it is a leaf as well
+        
+        rootPtr = tempNode;
+    }
+    else {
+        //Call it twice...not ideal but we dont use extra memory
+        LeafNode* p = balancedAdd(rootPtr, tempNode);
+        if (!p) return false;
+        rootPtr = p;
+    }
+
     tempNode = nullptr;
     delete tempNode;
 	return true;

@@ -29,10 +29,27 @@ void test2() {
 
 }
 
+void testConstructors(){
+    //works
+    BSTree defaultTree();
+    //works but does not mark leafs yet
+    BSTree arrayTree(10);
+    //works
+    BSTree copyTree(arrayTree);
+
+    
+}
+void testAdd() {
+    BSTree BST1(5);
+    BST1.add(12);
+}
+
 int main() {
     cout << "Begin Testing!" << endl << endl;
     // test1();
     //int a = 5;
+    testConstructors();
+    testAdd();
 
     cout << "Done!" << endl;
     return 0;
