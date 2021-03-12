@@ -139,7 +139,7 @@ public:
 
   // traversal methods
   void preorderTrav(void visit(int&)) const;
-  void inorderTrav(void visit(int&)) const;
+  string inorderTrav();
   void postorderTrav(void visit(int&)) const;
 
   // overload ops

@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <string>
 
 #include "BSTree.h"
 
@@ -292,8 +293,8 @@ bool BSTree::add(const int newData) {
         
         if (newData < ptr->data) {
             //In this case, we need to navigate left
+            LeafNode* tempNode = new LeafNode(newData);
             if (ptr->lThread == false) {
-                LeafNode* tempNode = new LeafNode(newData);
                 // At this point we know that the leftChild does not 
                 // point to any inorder predecessor. 
                 tempNode->leftChild = ptr->leftChild;
@@ -385,7 +386,7 @@ void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
         child = ptr->rightChild;
     }
     
-    if (ptr = parent->leftChild) {
+    if (ptr == parent->leftChild) {
         parent->leftChild = child;
     }
     else parent->rightChild = child;
@@ -458,8 +459,20 @@ void BSTree::preorderTrav(void visit(int&)) const {
 
 }
 
-void BSTree::inorderTrav(void visit(int&)) const {
-
+string BSTree::inorderTrav() {    
+    LeafNode* ptr = rootPtr->leftChild;
+    //Go to most left node
+    while (ptr->lThread) {
+        ptr = ptr->leftChild;
+    }
+    //At this point we are at the right-most node
+    string traversal = "";
+    //Continue right until we loop back to the dummy node
+    while (ptr != rootPtr) {
+        traversal += to_string(ptr->data) + " ";
+        ptr = inorderSuccessor(ptr);
+    }
+    return traversal;
 }
 
 void BSTree::postorderTrav(void visit(int&)) const {

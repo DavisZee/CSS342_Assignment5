@@ -87,14 +87,55 @@ void testRemove() {
     cout << "Test Remove Passed" << endl;
 }
 
+void testTraversal() {
+    
+    BSTree BST1(5);                             
+    string str = BST1.inorderTrav();                        
+    assert(str == "1 2 3 4 5 ");                            //Test inorderTraversal
+    assert(BST1.add(23));
+    assert(BST1.add(-1));
+    str = BST1.inorderTrav();
+    assert(str == "-1 1 2 3 4 5 23 ");                      //Test traversal after addition
+    assert(!BST1.add(1));
+    str = BST1.inorderTrav();
+    assert(str == "-1 1 2 3 4 5 23 ");                      //Test traversal after failed addition
+
+    assert(BST1.remove(3));
+    str = BST1.inorderTrav();
+    assert(str == "-1 1 2 4 5 23 ");                        //Test traversal after deletion
+    assert(BST1.remove(2));
+    str = BST1.inorderTrav();
+    assert(str == "-1 1 4 5 23 ");                          //Test traversal after second deletion
+    assert(!BST1.remove(2));
+    str = BST1.inorderTrav();
+    assert(str == "-1 1 4 5 23 ");                          //Test traversal after failed deletion
+
+    assert(BST1.add(45));                 
+    assert(BST1.add(3));
+    assert(BST1.add(2));
+    str = BST1.inorderTrav();
+    assert(str == "-1 1 2 3 4 5 23 45 ");                   //Test traversal after multiple addition and deletion
+    
+    BSTree copyTree(BST1);
+    str = copyTree.inorderTrav();
+    assert(str == "-1 1 2 3 4 5 23 45 ");                   //Test traversal on copy tree
+
+    cout << "Test Traversal Passed" << endl;
+}
 int main() {
     cout << "Begin Testing!" << endl << endl;
     // test1();
     //int a = 5;
-    testConstructors();    
+    testConstructors();
+    cout << endl;
     testAdd();    
+    cout << endl;
     testContains();
+    cout << endl;
     testRemove();
+    cout << endl;
+    testTraversal();
+    cout << endl;
     cout << "Done!" << endl;
     return 0;
 }
