@@ -144,13 +144,11 @@ LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
 
 LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     if (oldTreeRootPtr == nullptr) return nullptr;
-    LeafNode* temp = new LeafNode();
+    LeafNode* temp;
     temp = oldTreeRootPtr;
-    
     temp->leftChild = copyTree(oldTreeRootPtr->leftChild);
     temp->rightChild = copyTree(oldTreeRootPtr->rightChild);
     // clean up 
-    temp = nullptr;
     delete temp;
     return oldTreeRootPtr;
 }
@@ -240,11 +238,11 @@ BSTree::~BSTree() {
     // traverse tree
     // delete nodes individually 
     // until I hit the left most leaf keep looping
-    while (!trav->lThread) {
+    while (trav->lThread) {
         trav = trav->leftChild;        
     }
     // while the right thread isnt false keep looping
-    while (trav->rightChild == nullptr) {
+    while (trav->rThread) {
         del = trav;
         trav = trav->rightChild;
         delete del;
@@ -403,7 +401,7 @@ void BSTree::deleteNoChild(LeafNode* ptr, LeafNode* parent) {
 }
 
 void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
-    LeafNode* child = new LeafNode();
+    LeafNode* child;
     //Find out whether ptr has right or left child
     if (ptr->lThread) {
         child = ptr->leftChild;
