@@ -121,7 +121,7 @@ public:
   void clear();
   bool contains(const int anEntry) const;
   // toString by level
-  string toStringGivenLevel(LeafNode* root, int level);
+  string toStringGivenLevel(LeafNode* root, int level, string strLevel);
   // toString all levels
   string toStringTree();
 

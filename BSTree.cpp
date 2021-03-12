@@ -12,10 +12,29 @@
 
 using namespace std;
 
+
+
 ostream& operator<<(ostream& out, const BSTree& tree) {
-    //out << tree.toStringTree();
+    BSTree newTree(tree);
+    out << newTree.inorderTrav();
 	return out;
 }
+
+/*
+ostream& operator<<(ostream& out, const BSTree& tree) {
+    BSTree newTree(tree);
+    int height = newTree.getHeightHelper(newTree.rootPtr->leftChild);
+    cout << "height " << height << endl;
+    string strOut = "";
+    for (int i = 1; i <= height; i++) {
+        newTree.toStringGivenLevel(newTree.rootPtr->leftChild, i, strOut);
+        cout << "here: " << i << endl;
+        strOut += "\n";
+    }
+    out << strOut;
+	return out;
+}
+*/
 
 // LeafNode Public:
 
@@ -62,7 +81,7 @@ void LeafNode::setRightChild(LeafNode* rightLeaf) {
 //BSTree protected
 // goes through the tree and returns the height of the longest branch
 int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
-    if (subTreePtr == rootPtr) return 0;
+    if (!subTreePtr->lThread || !subTreePtr->rThread) return 0;
     
     int leftHeight = getHeightHelper(subTreePtr->leftChild);
     int rightHeight = getHeightHelper(subTreePtr->rightChild);
@@ -71,27 +90,31 @@ int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
     //returns the max of leftHeight and rightHeight (+ 1 to account for itself)
     return (leftHeight < rightHeight) ? rightHeight + 1: leftHeight + 1;
 }
+/*
+ * deprecated
 // toString all levels
 string BSTree::toStringTree() {
-    string s = nullptr;
+    string s;
     int height = getHeightHelper(rootPtr);
+    //cout << "here";
     for (int i = 0; i < height; i++) {
         s += toStringGivenLevel(rootPtr, i);
         s += "\n";
     }
     return s;
 }
+*/
 // toString given a level
-string BSTree::toStringGivenLevel(LeafNode* root, int level) {
-    string oneLevel = nullptr;
-    if (root == rootPtr) return oneLevel;
+string BSTree::toStringGivenLevel(LeafNode* root, int level, string strLevel) {
+    //cout << "here now";
+    if (root == rootPtr) return strLevel;
     if (level == 1) {
-        oneLevel += root->getData();
+        strLevel += root->getData();
     }else if (level > 1) {
-        toStringGivenLevel(root->leftChild, level - 1);
-        toStringGivenLevel(root->rightChild, level - 1);
+        toStringGivenLevel(root->leftChild, level - 1, strLevel);
+        toStringGivenLevel(root->rightChild, level - 1, strLevel);
     }
-    return oneLevel;
+    return strLevel;
 }
 
 int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {

@@ -12,21 +12,7 @@
 using namespace std;
 
 void test1() {
-    cout << "Hello" << endl;
-}
-
-void test2() {
-    cout << boolalpha; // prints boolean values as true/false rather than 1/0
-    BSTree myTree; // tree object creation
-    //
-    //test tree by adding in numbers 1 through 10 
-    //
-    int num(10);
-    for (int i = 0; i < num; i++) { // loops 10 times
-        assert(myTree.add(i)); // if fail to add then fail assert
-    }
-    cout << myTree << endl;
-
+    cout << "Hello" << endl << endl;
 }
 
 void testConstructors(){
@@ -36,7 +22,7 @@ void testConstructors(){
     BSTree arrayTree(10);
     //works
     BSTree copyTree(arrayTree);
-    cout << "Test Constructors Passed" << endl;
+    cout << "Test Constructors Passed" << endl << endl;
     
 }
 void testAdd() {
@@ -51,7 +37,7 @@ void testAdd() {
 
     //Make sure to validate the construction of the tree with traversals
     //Make sure to use findNode to test if the threads work
-    cout << "Test Add Passed" << endl;
+    cout << "Test Add Passed" << endl << endl;
 }
 void testContains() {
     BSTree BST1(10);
@@ -69,7 +55,7 @@ void testContains() {
     assert(BST1.remove(12));    //Remove a value
     assert(!BST1.remove(12));   //check contains on removed value
 
-    cout << "Test Contains Passed" << endl;
+    cout << "Test Contains Passed" << endl << endl;
 
     //Add tests for contains after removal
 }
@@ -84,7 +70,7 @@ void testRemove() {
     assert(BST1.add(13));          //Add new value
     assert(BST1.remove(13));       //Remove recently added value
 
-    cout << "Test Remove Passed" << endl;
+    cout << "Test Remove Passed" << endl << endl;
 }
 
 void testTraversal() {
@@ -120,7 +106,7 @@ void testTraversal() {
     str = copyTree.inorderTrav();
     assert(str == "-1 1 2 3 4 5 23 45 ");                   //Test traversal on copy tree
 
-    cout << "Test Traversal Passed" << endl;
+    cout << "Test Traversal Passed" << endl << endl;
 }
 
 void assignmentTest() {
@@ -134,22 +120,30 @@ void assignmentTest() {
     string str = myTree.inorderTrav();
     assert(str == "1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 ");
     
-    cout << "Assignment Test Passed" << endl;
+    cout << "Assignment Test Passed" << endl << endl;
 }
+
+void testOutStream() {
+    BSTree BST1(8); 
+    //
+    // testing my << operator
+    //
+    BSTree BST2(BST1);
+    cout << BST2 << endl;
+    cout << "Ostream Test Passed" << endl << endl;
+}
+
 int main() {
     cout << "Begin Testing!" << endl << endl;
     // test1();
     //int a = 5;
     testConstructors();
-    cout << endl;
     testAdd();    
-    cout << endl;
     testContains();
-    cout << endl;
     testRemove();
-    cout << endl;
     testTraversal();
-    cout << endl;
+    assignmentTest();
+    testOutStream();
     cout << "************BEGIN ASSIGNMENT REQUIRED TEST************" << endl;
     assignmentTest();
     cout << "Done!" << endl;
