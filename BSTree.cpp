@@ -79,12 +79,13 @@ string BSTree::toStringTree() {
         s += toStringGivenLevel(rootPtr, i);
         s += "\n";
     }
+    return s;
 }
 // toString given a level
 string BSTree::toStringGivenLevel(LeafNode* root, int level) {
     string oneLevel = nullptr;
     if (root == rootPtr) return oneLevel;
-    if (level = 1) {
+    if (level == 1) {
         oneLevel += root->getData();
     }else if (level > 1) {
         toStringGivenLevel(root->leftChild, level - 1);
