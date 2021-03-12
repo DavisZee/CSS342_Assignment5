@@ -65,9 +65,26 @@ void testContains() {
     assert(BST1.contains(-122));//Test contains on new negative node]
     assert(BST1.add(12));       //Add new node in between
     assert(BST1.contains(12));  //Test contains on new node that is not largest
+
+    assert(BST1.remove(12));    //Remove a value
+    assert(!BST1.remove(12));   //check contains on removed value
+
     cout << "Test Contains Passed" << endl;
 
     //Add tests for contains after removal
+}
+
+void testRemove() {
+    BSTree BST1(10);
+    assert(BST1.remove(2));        //Test remove
+    assert(!BST1.remove(2));       //Test duplicate remove
+    assert(BST1.add(2));           //Add value again
+    assert(BST1.remove(2));        //Test added value
+    assert(!BST1.remove(123));     //Test non-existent value
+    assert(BST1.add(13));          //Add new value
+    assert(BST1.remove(13));       //Remove recently added value
+
+    cout << "Test Remove Passed" << endl;
 }
 
 int main() {
@@ -77,6 +94,7 @@ int main() {
     testConstructors();    
     testAdd();    
     testContains();
+    testRemove();
     cout << "Done!" << endl;
     return 0;
 }

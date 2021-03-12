@@ -98,6 +98,16 @@ protected:
   // the copy. Changed from auto to bool
   LeafNode* copyTree( LeafNode* oldTreeRootPtr);
 
+  void deleteNoChild(LeafNode* ptr, LeafNode* parent);
+
+  void deleteOneChild(LeafNode* ptr, LeafNode* parent);
+
+  void deleteTwoChild(LeafNode* ptr, LeafNode* parent);
+
+  LeafNode* inorderSuccessor(LeafNode* ptr);
+
+  LeafNode* inorderPredecessor(LeafNode* ptr);
+
   // recursively deletes all nodes from tree
   void burnTheTree(LeafNode* subTreePtr);
 

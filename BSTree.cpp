@@ -313,18 +313,135 @@ bool BSTree::add(const int newData) {
 }
 
 bool BSTree::remove(const int data) {
-    LeafNode* found = findNode(rootPtr->leftChild, data);
-    //If the value is not in the tree then return false
+    //Set parent to dummy node and our pointer to the real root
+    LeafNode* parent = rootPtr, *ptr = rootPtr->leftChild;
+    bool found = false;
+    //Can use findNode function but we won't get the parent node (need that for linking)
+    //Traverse tree until find target node and remember parent
+    while (ptr != nullptr) {
+        if (data == ptr->data) {
+            found = true;   //We found the node
+            break;
+        }
+        parent = ptr;
+        if (data < ptr->data){
+            if (ptr->lThread == true) {
+                ptr = ptr->leftChild;
+            }
+            else break;
+        }
+        else {
+            if (ptr->rThread == true) {
+                ptr = ptr->rightChild;
+            }
+            else break;
+        }
+    }
     if (!found) return false;
+    
+    //At this point we have the target node and we have its parent as well
 
-    //Traverse tree until you find target node
-    //When traversing make sure to keep track of parent node as well
-    //
+    //Now we have to remove and link the new nodes depending on their children
+
+    //If ptr has two children, then both threads will be true and we would need to
+    //reroute the pointers for both children
+    if (ptr->rThread && ptr->lThread) {
+        deleteTwoChild(ptr, parent);
+    }
+    //If ptr only has one child
+    else if (ptr->rThread && !(ptr->lThread)||(!(ptr->rThread) && (ptr->lThread))) {
+        deleteOneChild(ptr, parent);
+    }
+ 
+    //If ptr has no children (is a leaf)
+    else {
+        deleteNoChild(ptr, parent);
+    }
+    
 	return true;
 }
 
+//If target has no children there only need to reroute parent pointers
+void BSTree::deleteNoChild(LeafNode* ptr, LeafNode* parent) {
+    if (ptr == parent->leftChild) {
+        //Now the left thread of parent is a thread
+        parent->lThread = false;
+        parent->leftChild = ptr->leftChild;
+    }
+    else {
+        parent->rThread = false;
+        parent->rightChild = ptr->rightChild;
+    }
+    delete ptr;
+}
+
+void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
+    LeafNode* child = new LeafNode();
+    //Find out whether ptr has right or left child
+    if (ptr->lThread) {
+        child = ptr->leftChild;
+    }
+    else {
+        child = ptr->rightChild;
+    }
+    
+    if (ptr = parent->leftChild) {
+        parent->leftChild = child;
+    }
+    else parent->rightChild = child;
+
+    LeafNode* successor = inorderSuccessor(ptr);
+    LeafNode* predecessor = inorderPredecessor(ptr);
+    
+    if (!ptr->lThread) {
+        predecessor->rightChild = successor;
+    }
+    else if (!ptr->rThread) successor->leftChild = predecessor;
+    
+    delete ptr;
+}
+
+void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
+    LeafNode* successor = ptr->rightChild;
+    LeafNode* parentSuccessor = ptr;
+
+    while (successor->lThread) {
+        parentSuccessor = successor;
+        successor = successor->leftChild;
+
+    }
+    parentSuccessor->data = successor->data;
+    
+    if ((!successor->lThread) && !(successor->rThread)) deleteNoChild(successor, parentSuccessor);
+
+    else deleteOneChild(successor, parentSuccessor);
+}
 void BSTree::clear() {
     
+}
+
+LeafNode* BSTree::inorderSuccessor(LeafNode* ptr) {
+    //If there is a thread then return the next threaded node
+    if (!ptr->rThread) {
+        return ptr->rightChild;
+    }
+    //If no thread then inorder successor is the leftmost node of node to right
+    ptr = ptr->rightChild;
+    while (ptr->lThread) {
+        ptr = ptr->leftChild;
+    }
+    return ptr;
+}
+
+LeafNode* BSTree::inorderPredecessor(LeafNode* ptr) {
+    if (!ptr->lThread) {
+        return ptr->leftChild;
+    }
+    ptr = ptr->leftChild;
+    while (ptr->rThread) {
+        ptr = ptr->rightChild;
+    }
+    return ptr;
 }
 
 int BSTree::getEntry(const int anEntry) {
