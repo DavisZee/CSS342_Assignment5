@@ -136,6 +136,10 @@ public:
   void clear();
   int getEntry(const int anEntry); // I think its supposed to be a getItem also throws exception
   bool contains(const int anEntry) const;
+  // toString by level
+  string toStringGivenLevel(LeafNode* root, int level);
+  // toString all levels
+  string toStringTree();
 
   // traversal methods
   void preorderTrav(void visit(int&)) const;

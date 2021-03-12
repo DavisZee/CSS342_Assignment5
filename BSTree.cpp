@@ -13,6 +13,7 @@
 using namespace std;
 
 ostream& operator<<(ostream& out, const BSTree& tree) {
+    //out << tree.toStringTree();
 	return out;
 }
 
@@ -63,9 +64,9 @@ void LeafNode::setRightChild(LeafNode* rightLeaf) {
 }
 
 //BSTree protected
-
+// goes through the tree and returns the height of the longest branch
 int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
-    if (subTreePtr == nullptr) return 0;
+    if (subTreePtr == rootPtr) return 0;
     
     int leftHeight = getHeightHelper(subTreePtr->leftChild);
     int rightHeight = getHeightHelper(subTreePtr->rightChild);
@@ -73,6 +74,27 @@ int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
 
     //returns the max of leftHeight and rightHeight (+ 1 to account for itself)
     return (leftHeight < rightHeight) ? rightHeight + 1: leftHeight + 1;
+}
+// toString all levels
+string BSTree::toStringTree() {
+    string s = nullptr;
+    int height = getHeightHelper(rootPtr);
+    for (int i = 0; i < height; i++) {
+        s += toStringGivenLevel(rootPtr, i);
+        s += "\n";
+    }
+}
+// toString given a level
+string BSTree::toStringGivenLevel(LeafNode* root, int level) {
+    string oneLevel = nullptr;
+    if (root == rootPtr) return oneLevel;
+    if (level = 1) {
+        oneLevel += root->getData();
+    }else if (level > 1) {
+        toStringGivenLevel(root->leftChild, level - 1);
+        toStringGivenLevel(root->rightChild, level - 1);
+    }
+    return oneLevel;
 }
 
 int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
@@ -362,7 +384,7 @@ bool BSTree::remove(const int data) {
 	return true;
 }
 
-//If target has no children there only need to reroute parent pointers
+//If target has no children there, only need to reroute parent pointers
 void BSTree::deleteNoChild(LeafNode* ptr, LeafNode* parent) {
     if (ptr == parent->leftChild) {
         //Now the left thread of parent is a thread
