@@ -142,8 +142,8 @@ BSTree::BSTree(const int data) {
 
     //Dummy node
     rootPtr = new LeafNode();
-    //Link whole tree to be on left of dummy node
-    rootPtr->rThread = true;
+    // make the first node which for now is a dummy node
+    rootPtr->rThread = false;
     rootPtr->lThread = false;
     rootPtr->leftChild = rootPtr;
     rootPtr->rightChild = rootPtr;
@@ -244,32 +244,23 @@ void BSTree::setRootData(const int newData) {
 bool BSTree::add(const int newData) {
     //first check if tree is empty
     if ((rootPtr->leftChild == rootPtr) && (rootPtr->rightChild == rootPtr)) {
-        //At this point the tree is empty and only has dummy node
-        LeafNode* tempNode = new LeafNode();
-        //Reroute all pointers of root to tempNode
-        tempNode->data = newData;
-        tempNode->leftChild = rootPtr->leftChild;
-        tempNode->lThread = rootPtr->lThread;
-        tempNode->rThread = false;
-        tempNode->rightChild = rootPtr->rightChild;
-        //Insert tempNode into tree
-        rootPtr->leftChild = tempNode;
-        rootPtr->lThread = true;
+        rootPtr->data = newData;
         return true;
     }
     //Tree is not empty so we will have to just add it
     LeafNode* ptr = new LeafNode();
+    ptr = rootPtr;
     //This will avoid the dummy node
-    ptr = rootPtr->leftChild;
+    //ptr = rootPtr->leftChild;
     //Keep looping until internally stopped by return
     while (1) {
         if (newData == ptr->data) return false;
         if (newData < ptr->data) {
             //In this case, we need to navigate left
-            LeafNode* tempNode = new LeafNode(newData);
             if (ptr->lThread == false) {
-                //At this point we know that the leftChild does not point to any
-                //inorder predecessor. 
+                LeafNode* tempNode = new LeafNode(newData);
+                // At this point we know that the leftChild does not 
+                // point to any inorder predecessor. 
                 tempNode->leftChild = ptr->leftChild;
                 tempNode->lThread = ptr->rThread;
                 tempNode->rThread = false;
@@ -285,8 +276,8 @@ bool BSTree::add(const int newData) {
         }
         //Do same thing if it is larger than the current node data
         if (newData > ptr->data) {
-            LeafNode* tempNode = new LeafNode(newData);
             if (ptr->rThread == false) {
+                LeafNode* tempNode = new LeafNode(newData);
                 tempNode->rightChild = ptr->rightChild;
                 tempNode->rThread = ptr->rThread;
                 tempNode->lThread = false;
