@@ -33,6 +33,8 @@ private:
   // child nodes
 	LeafNode* leftChild, *rightChild;
   // left and right threads
+  // if either is true, then there is a node in that direction
+  // if false, then there is a thread in that direction
 	bool lThread, rThread;
 
 
@@ -78,7 +80,7 @@ protected:
 
   // Recursively adds nodes left then right to keeps tree balanced, this is 
   // an unnecessarry method, does not need to be implemented
-  void balancedAdd(int arr[] , int start, int end);
+  void balancedAdd(int start, int end);
 
   // removes target value from tree, supposed to be virtual auto return type
   // in the book. Changed to bool return type
