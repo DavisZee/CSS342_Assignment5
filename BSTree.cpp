@@ -87,17 +87,6 @@ int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
     return counter + 1;
 }
 
-
-
-bool BSTree::removeValue(LeafNode* subTreePtr, const int target) {
-    // careful of mem leak
-	return true;
-}
-
-auto BSTree::moveValuesUpTree(LeafNode* subTreePtr) {
-	return;
-}
-
 LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
     if (treePtr->data == target) return treePtr;
     //If there is nowhere to go then we have hit the bottom and have not found node.
@@ -122,11 +111,6 @@ LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     temp = nullptr;
     delete temp;
     return oldTreeRootPtr;
-}
-
-//destroys all nodes in the tree and makes sure there is no mem leak
-void BSTree::burnTheTree(LeafNode* subTreePtr) {
-
 }
 
 void BSTree::preorder(void visit(int), LeafNode* treePtr) {
@@ -446,18 +430,9 @@ LeafNode* BSTree::inorderPredecessor(LeafNode* ptr) {
     return ptr;
 }
 
-int BSTree::getEntry(const int anEntry) {
-	return 0;
-	
-}
-
 bool BSTree::contains(const int anEntry) const {
     //Return true if findNode returns a ptr and false if returns nullptr
     return (findNode(rootPtr->leftChild, anEntry) != nullptr) ? true : false;
-}
-
-void BSTree::preorderTrav(void visit(int&)) const {
-
 }
 
 string BSTree::inorderTrav() {    
@@ -474,10 +449,6 @@ string BSTree::inorderTrav() {
         ptr = inorderSuccessor(ptr);
     }
     return traversal;
-}
-
-void BSTree::postorderTrav(void visit(int&)) const {
-
 }
 
 BSTree& BSTree::operator= (const BSTree& rightHandSIde) {
