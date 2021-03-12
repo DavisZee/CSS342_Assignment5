@@ -107,8 +107,7 @@ LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
     else if (treePtr->data < target) return findNode(treePtr->rightChild, target);
 
     //At this point, target was not in the tree and thus return null ptr
-
-	
+    return nullptr;
 }
 
 LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
@@ -118,7 +117,9 @@ LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     
     temp->leftChild = copyTree(oldTreeRootPtr->leftChild);
     temp->rightChild = copyTree(oldTreeRootPtr->rightChild);
-    
+    // clean up 
+    temp = nullptr;
+    delete temp;
     return oldTreeRootPtr;
 }
 
@@ -207,8 +208,22 @@ BSTree::BSTree(const BSTree* aTree) {
 }
 
 BSTree::~BSTree() {
-
+    LeafNode* del;
+    LeafNode* trav = rootPtr->leftChild;
+    // traverse tree
+    // delete nodes individually 
+    // until I hit the left most leaf keep looping
+    while (!trav->lThread) {
+        trav = trav->leftChild;        
+    }
+    // while the right thread isnt false keep looping
+    while (trav->rightChild == nullptr) {
+        del = trav;
+        trav = trav->rightChild;
+        delete del;
+    }
 }
+
 
 //
 bool BSTree::isEmpty() const {
@@ -247,6 +262,9 @@ bool BSTree::add(const int newData) {
         //Insert tempNode into tree
         rootPtr->leftChild = tempNode;
         rootPtr->lThread = true;
+        // clean up tempNode
+        tempNode = nullptr;
+        delete tempNode;
         return true;
     }
     //Tree is not empty so we will have to just add it
