@@ -26,10 +26,6 @@ private:
 
   // data contained in the object
   int data{0};
-  // state of if this node is a leaf node or not
-  // if it is a leaf node then it will be true, otherwise false
- bool leafState;
-
   // child nodes
 	LeafNode* leftChild, *rightChild;
   // left and right threads
@@ -82,14 +78,6 @@ protected:
   // an unnecessarry method, does not need to be implemented
   void balancedAdd(int start, int end);
 
-  // removes target value from tree, supposed to be virtual auto return type
-  // in the book. Changed to bool return type
-  bool removeValue(LeafNode* subTreePtr, const int target);
-
-  // copies values up tree to overwrite value in current node until a node is 
-  // reached. The node is then removed since its value is stored in the parent
-  auto moveValuesUpTree(LeafNode* subTreePtr);
-
   // recursively searches for target value, returns nullptr if not found.
   // changed from auto to node pointer
   LeafNode* findNode(LeafNode* treePtr, const int target) const;
@@ -107,9 +95,6 @@ protected:
   LeafNode* inorderSuccessor(LeafNode* ptr);
 
   LeafNode* inorderPredecessor(LeafNode* ptr);
-
-  // recursively deletes all nodes from tree
-  void burnTheTree(LeafNode* subTreePtr);
 
   // recursive traversal helper methods, might not be all necessary
   void preorder(void visit(int), LeafNode* treePtr);
@@ -134,17 +119,13 @@ public:
   bool add(const int newData);
   bool remove(const int data);
   void clear();
-  int getEntry(const int anEntry); // I think its supposed to be a getItem also throws exception
   bool contains(const int anEntry) const;
   // toString by level
   string toStringGivenLevel(LeafNode* root, int level);
   // toString all levels
   string toStringTree();
 
-  // traversal methods
-  void preorderTrav(void visit(int&)) const;
   string inorderTrav();
-  void postorderTrav(void visit(int&)) const;
 
   // overload ops
   BSTree& operator= (const BSTree& rightHandSIde);
