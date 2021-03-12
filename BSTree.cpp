@@ -43,10 +43,6 @@ int LeafNode::getData() {
     return data;
 }
 
-bool LeafNode::isLeafNode() const {
-    return (leafState == true);
-}
-
 auto LeafNode::getLeftChildPtr() const {
     return leftChild;
 }
