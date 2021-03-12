@@ -125,14 +125,16 @@ void testTraversal() {
 
 void assignmentTest() {
     //Create tree with 20 nodes
-    int size = 20;
+    int size = 40;
     BSTree myTree(size);
     //Delete only the even nodes
     for (int i = 2; i <= size; i+=2) {
         myTree.remove(i);
     }
     string str = myTree.inorderTrav();
-    assert(str == "1 3 5 7 9 11 13 15 17 19 ");
+    assert(str == "1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 ");
+    
+    cout << "Assignment Test Passed" << endl;
 }
 int main() {
     cout << "Begin Testing!" << endl << endl;

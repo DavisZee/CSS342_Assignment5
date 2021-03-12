@@ -403,6 +403,7 @@ void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
 }
 
 void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
+    
     LeafNode* successor = ptr->rightChild;
     LeafNode* parentSuccessor = ptr;
 
@@ -411,7 +412,7 @@ void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
         successor = successor->leftChild;
 
     }
-    parentSuccessor->data = successor->data;
+    ptr->data = successor->data;
     
     if ((!successor->lThread) && !(successor->rThread)) deleteNoChild(successor, parentSuccessor);
 
