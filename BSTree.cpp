@@ -262,6 +262,7 @@ bool BSTree::add(const int newData) {
         //Insert tempNode into tree
         rootPtr->leftChild = tempNode;
         rootPtr->lThread = true;
+        // clean up tempNode
         tempNode = nullptr;
         delete tempNode;
         return true;
