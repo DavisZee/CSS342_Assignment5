@@ -18,16 +18,18 @@ ostream& operator<<(ostream& out, const BSTree& tree) {
 // LeafNode Public:
 
 // constructor
-LeafNode::LeafNode() : leftChild{nullptr}, rightChild{nullptr} {}
+LeafNode::LeafNode() : leftChild{ nullptr }, rightChild{ nullptr }, lThread{ false }, 
+rThread{ false }
+{}
 
 // constructor with data input
 LeafNode::LeafNode(const int& newData) : data{newData}, leftChild{nullptr}, 
-    rightChild{nullptr} 
+    rightChild{nullptr}, lThread{ false }, rThread{ false }
 {}
 
 //constructure with all variables argument
 LeafNode::LeafNode(const int& newData, LeafNode* leftPtr, LeafNode* rightPtr) : 
-    data{newData}, leftChild{leftPtr}, rightChild{rightPtr} 
+    data{newData}, leftChild{leftPtr}, rightChild{rightPtr}, lThread{ false }, rThread{ false }
 {}
 
 
@@ -84,31 +86,7 @@ int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
     return counter + 1;
 }
 
-LeafNode* BSTree::balancedAdd(LeafNode* subTreePtr, LeafNode* newNodePtr) {
-    // maybe check and set leafState in this metho
-    
-    if (subTreePtr == nullptr) {
-        newNodePtr->leafState = true;
-        return newNodePtr;
-    }
-   
-    else if (subTreePtr->data > newNodePtr->data) {
-        subTreePtr->leafState = false;
-        subTreePtr->leftChild = balancedAdd(subTreePtr->leftChild, newNodePtr);
-        if (subTreePtr->leftChild == nullptr) return nullptr;
-    }
-    else if (subTreePtr->data < newNodePtr->data) {
-        subTreePtr->leafState = false;
-        subTreePtr->rightChild = balancedAdd(subTreePtr->rightChild, newNodePtr);
-        if (subTreePtr->rightChild == nullptr) return nullptr;
-    }
-    //Want to make sure duplicates are not stored
-    else if (subTreePtr->data == newNodePtr->data) {
-        return nullptr;
-    }
-    return subTreePtr;
-    
-}
+
 
 bool BSTree::removeValue(LeafNode* subTreePtr, const int target) {
     // careful of mem leak
@@ -155,21 +133,58 @@ void BSTree::postorder(void visit(int), LeafNode* treePtr) {
 //BSTree public
 
 BSTree::BSTree() {
-    //In the case of empty, root will be null
-    rootPtr = nullptr;
+    //In the case of empty, root will be a dummy node
+    rootPtr = new LeafNode();
 }
 
 BSTree::BSTree(const int data) {
    //This method will add all values from 1 - data into BSTree
-    int temp = data;
-    int* values = new int[data];
-    for (int i = 0; i < data; i++) {
-        values[i] = i + 1;
-    }
-    rootPtr = sortedArrToTree(values, 1, data);
 
-    delete[] values;
+    //Dummy node
+    rootPtr = new LeafNode();
+    //Link whole tree to be on left of dummy node
+    rootPtr->rThread = true;
+    rootPtr->lThread = false;
+    rootPtr->leftChild = rootPtr;
+    rootPtr->rightChild = rootPtr;
+    //Add all values from 1 - data into tree
+    for (int i = 0; i < data; i++) {
+        add(i + 1);
+    }
+    //rootPtr = sortedArrToTree(values, 1, data);
+
+    //delete[] values;
 }
+
+
+
+void BSTree::balancedAdd(int arr[], int start, int end) {
+    // maybe check and set leafState in this metho
+    
+
+    //if (subTreePtr == nullptr) {
+    //    newNodePtr->leafState = true;
+    //    return newNodePtr;
+    //}
+   
+    //else if (subTreePtr->data > newNodePtr->data) {
+    //    subTreePtr->leafState = false;
+    //    subTreePtr->leftChild = balancedAdd(subTreePtr->leftChild, newNodePtr);
+    //    if (subTreePtr->leftChild == nullptr) return nullptr;
+    //}
+    //else if (subTreePtr->data < newNodePtr->data) {
+    //    subTreePtr->leafState = false;
+    //    subTreePtr->rightChild = balancedAdd(subTreePtr->rightChild, newNodePtr);
+    //    if (subTreePtr->rightChild == nullptr) return nullptr;
+    //}
+    ////Want to make sure duplicates are not stored
+    //else if (subTreePtr->data == newNodePtr->data) {
+    //    return nullptr;
+    //}
+    //return subTreePtr;
+    //
+}
+
 LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
 
     if (start > end) return NULL;
@@ -178,6 +193,7 @@ LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
 
     //Assign root as middle pointer
     LeafNode* midNode = new LeafNode(arr[mid - 1]);
+
 
     //Recursively link left and right sides
     midNode->leftChild = sortedArrToTree(arr, start, mid - 1);
@@ -226,30 +242,96 @@ void BSTree::setRootData(const int newData) {
 }
 
 bool BSTree::add(const int newData) {
-    LeafNode* tempNode = new LeafNode(newData); // start by creating a new ptr
-    // should check and set leafState in this method
-    // if tree is empty then set it as the root
-    // 
-    // if node is now a leaf then turn into a threaded node
-    // clear and delete all pointer variables created
-    
-    //Point tempNode to rootPtr
-    if (rootPtr == nullptr) {
-        //This is the only node so it is a leaf as well
-        
-        rootPtr = tempNode;
+    //first check if tree is empty
+    if ((rootPtr->leftChild == rootPtr) && (rootPtr->rightChild == rootPtr)) {
+        //At this point the tree is empty and only has dummy node
+        LeafNode* tempNode = new LeafNode();
+        //Reroute all pointers of root to tempNode
+        tempNode->data = newData;
+        tempNode->leftChild = rootPtr->leftChild;
+        tempNode->lThread = rootPtr->lThread;
+        tempNode->rThread = false;
+        tempNode->rightChild = rootPtr->rightChild;
+        //Insert tempNode into tree
+        rootPtr->leftChild = tempNode;
+        rootPtr->lThread = true;
+        return true;
     }
-    else {
-        //Call it twice...not ideal but we dont use extra memory
-        LeafNode* p = balancedAdd(rootPtr, tempNode);
-        if (!p) return false;
-        rootPtr = p;
-    }
+    //Tree is not empty so we will have to just add it
+    LeafNode* ptr = new LeafNode();
+    //This will avoid the dummy node
+    ptr = rootPtr->leftChild;
+    //Keep looping until internally stopped by return
+    while (1) {
+        if (newData == ptr->data) return false;
+        if (newData < ptr->data) {
+            //In this case, we need to navigate left
+            LeafNode* tempNode = new LeafNode(newData);
+            if (ptr->lThread == false) {
+                //At this point we know that the leftChild does not point to any
+                //inorder predecessor. 
+                tempNode->leftChild = ptr->leftChild;
+                tempNode->lThread = ptr->rThread;
+                tempNode->rThread = false;
 
-    tempNode = nullptr;
-    delete tempNode;
-	return true;
+                //Point to inorder successor 
+                tempNode->rightChild = ptr;
+                ptr->lThread = true;
+                ptr->leftChild = tempNode;
+                return true;
+            }
+            else ptr = ptr->leftChild;
+
+        }
+        //Do same thing if it is larger than the current node data
+        if (newData > ptr->data) {
+            LeafNode* tempNode = new LeafNode(newData);
+            if (ptr->rThread == false) {
+                tempNode->rightChild = ptr->rightChild;
+                tempNode->rThread = ptr->rThread;
+                tempNode->lThread = false;
+                tempNode->leftChild = ptr;
+
+                ptr->rThread = true;
+                ptr->rightChild = tempNode;
+                return true;
+            }
+            else ptr = ptr->rightChild;
+        }
+    }
 }
+
+    
+    
+    
+//    
+//    
+//    
+//    
+//    LeafNode* tempNode = new LeafNode(newData); // start by creating a new ptr
+//    // should check and set leafState in this method
+//    // if tree is empty then set it as the root
+//    // 
+//    // if node is now a leaf then turn into a threaded node
+//    // clear and delete all pointer variables created
+//    
+//    //Point tempNode to rootPtr
+//    if (rootPtr == nullptr) {
+//        //This is the only node so it is a leaf as well
+//        
+//        rootPtr = tempNode;
+//    }
+//    else {
+//        //Call it twice...not ideal but we dont use extra memory
+//        LeafNode* p = balancedAdd(rootPtr, tempNode);
+//        if (!p) return false;
+//        rootPtr = p;
+//    }
+//
+//    tempNode = nullptr;
+//    delete tempNode;
+//	return true;
+//}
 
 bool BSTree::remove(const int data) {
     // careful of mem leak here

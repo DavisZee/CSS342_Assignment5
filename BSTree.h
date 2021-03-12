@@ -31,8 +31,10 @@ private:
  bool leafState;
 
   // child nodes
-  LeafNode* leftChild;
-  LeafNode* rightChild;
+	LeafNode* leftChild, *rightChild;
+  // left and right threads
+	bool lThread, rThread;
+
 
 public:
   // constructors
@@ -66,6 +68,8 @@ private:
 
   // Helpert to convert a sorted array into a tree
   LeafNode* sortedArrToTree(int arr[], int start, int end);
+  
+
 
 protected:
   // helper methods
@@ -74,7 +78,7 @@ protected:
 
   // Recursively adds nodes left then right to keeps tree balanced, this is 
   // an unnecessarry method, does not need to be implemented
-  LeafNode* balancedAdd(LeafNode* subTreePtr, LeafNode* newNodePtr);
+  void balancedAdd(int arr[] , int start, int end);
 
   // removes target value from tree, supposed to be virtual auto return type
   // in the book. Changed to bool return type

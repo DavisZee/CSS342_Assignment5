@@ -42,6 +42,7 @@ void testConstructors(){
 void testAdd() {
     BSTree BST1(5);
     BST1.add(12);
+    BST1.add(25);
 }
 
 int main() {
