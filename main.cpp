@@ -45,6 +45,12 @@ void testAdd() {
     assert(BST1.add(25));   //Test linking to newly added number
     assert(BST1.add(11));   //Test linking to newly added number
     assert(BST1.add(-12));  //Test negative number
+
+    assert(!BST1.add(12));
+    assert(!BST1.add(-12));
+
+    //Make sure to validate the construction of the tree with traversals
+    //Make sure to use findNode to test if the threads work
 }
 void testContains() {
     BSTree BST1(10);
