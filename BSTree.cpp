@@ -98,8 +98,17 @@ auto BSTree::moveValuesUpTree(LeafNode* subTreePtr) {
 }
 
 LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
-	LeafNode* lf = new LeafNode();
-	return lf;
+    if (treePtr->data == target) return treePtr;
+    //If there is nowhere to go then we have hit the bottom and have not found node.
+    else if (treePtr->rThread == false && treePtr->lThread == false) return nullptr;
+
+    else if (treePtr->data > target) return findNode(treePtr->leftChild, target);
+
+    else if (treePtr->data < target) return findNode(treePtr->rightChild, target);
+
+    //At this point, target was not in the tree and thus return null ptr
+
+	
 }
 
 LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
@@ -147,42 +156,23 @@ BSTree::BSTree(const int data) {
     rootPtr->lThread = false;
     rootPtr->leftChild = rootPtr;
     rootPtr->rightChild = rootPtr;
-    //Add all values from 1 - data into tree
-    for (int i = 0; i < data; i++) {
-        add(i + 1);
-    }
-    //rootPtr = sortedArrToTree(values, 1, data);
-
-    //delete[] values;
+    //Call BalancedAdd to add all values into tree in correct order
+    balancedAdd(1, data);
+    
 }
 
-
-
-void BSTree::balancedAdd(int arr[], int start, int end) {
+void BSTree::balancedAdd(int start, int end) {
     // maybe check and set leafState in this metho
-    
+    if (start > end) return;
 
-    //if (subTreePtr == nullptr) {
-    //    newNodePtr->leafState = true;
-    //    return newNodePtr;
-    //}
-   
-    //else if (subTreePtr->data > newNodePtr->data) {
-    //    subTreePtr->leafState = false;
-    //    subTreePtr->leftChild = balancedAdd(subTreePtr->leftChild, newNodePtr);
-    //    if (subTreePtr->leftChild == nullptr) return nullptr;
-    //}
-    //else if (subTreePtr->data < newNodePtr->data) {
-    //    subTreePtr->leafState = false;
-    //    subTreePtr->rightChild = balancedAdd(subTreePtr->rightChild, newNodePtr);
-    //    if (subTreePtr->rightChild == nullptr) return nullptr;
-    //}
-    ////Want to make sure duplicates are not stored
-    //else if (subTreePtr->data == newNodePtr->data) {
-    //    return nullptr;
-    //}
-    //return subTreePtr;
-    //
+    int mid = (start + end) / 2;
+
+    add(mid);
+
+    balancedAdd(start, mid - 1);
+
+    balancedAdd( mid + 1, end);
+
 }
 
 LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
@@ -234,11 +224,13 @@ int BSTree::getNumOfNodes() const {
 }
 
 int BSTree::getRootData() const {
-	return rootPtr->data;
+    //Compensate for dummy node
+	return rootPtr->leftChild->data;
 }
 
 void BSTree::setRootData(const int newData) {
-    rootPtr->data = newData;
+    //Compensate for dummy node
+    rootPtr->leftChild->data = newData;
 }
 
 bool BSTree::add(const int newData) {
@@ -262,27 +254,8 @@ bool BSTree::add(const int newData) {
     //This will avoid the dummy node
     ptr = rootPtr->leftChild;
     //Keep looping until internally stopped by return
-    while (1) {
-        if (newData == ptr->data) return false;
-        if (newData < ptr->data) {
-            //In this case, we need to navigate left
-            LeafNode* tempNode = new LeafNode(newData);
-            if (ptr->lThread == false) {
-                //At this point we know that the leftChild does not point to any
-                //inorder predecessor. 
-                tempNode->leftChild = ptr->leftChild;
-                tempNode->lThread = ptr->rThread;
-                tempNode->rThread = false;
-
-                //Point to inorder successor 
-                tempNode->rightChild = ptr;
-                ptr->lThread = true;
-                ptr->leftChild = tempNode;
-                return true;
-            }
-            else ptr = ptr->leftChild;
-
-        }
+    while (true) {
+        if (newData == ptr->data) return false; 
         //Do same thing if it is larger than the current node data
         if (newData > ptr->data) {
             LeafNode* tempNode = new LeafNode(newData);
@@ -298,43 +271,37 @@ bool BSTree::add(const int newData) {
             }
             else ptr = ptr->rightChild;
         }
+        
+        if (newData < ptr->data) {
+            //In this case, we need to navigate left
+            LeafNode* tempNode = new LeafNode(newData);
+            if (ptr->lThread == false) {
+                //At this point we know that the leftChild does not point to any
+                //inorder predecessor. 
+                tempNode->leftChild = ptr->leftChild;
+                tempNode->lThread = ptr->lThread;
+                tempNode->rThread = false;
+
+                //Point to inorder successor 
+                tempNode->rightChild = ptr;
+                ptr->lThread = true;
+                ptr->leftChild = tempNode;
+                return true;
+            }
+            else ptr = ptr->leftChild;
+
+        }
     }
 }
 
-    
-    
-    
-//    
-//    
-//    
-//    
-//    LeafNode* tempNode = new LeafNode(newData); // start by creating a new ptr
-//    // should check and set leafState in this method
-//    // if tree is empty then set it as the root
-//    // 
-//    // if node is now a leaf then turn into a threaded node
-//    // clear and delete all pointer variables created
-//    
-//    //Point tempNode to rootPtr
-//    if (rootPtr == nullptr) {
-//        //This is the only node so it is a leaf as well
-//        
-//        rootPtr = tempNode;
-//    }
-//    else {
-//        //Call it twice...not ideal but we dont use extra memory
-//        LeafNode* p = balancedAdd(rootPtr, tempNode);
-//        if (!p) return false;
-//        rootPtr = p;
-//    }
-//
-//    tempNode = nullptr;
-//    delete tempNode;
-//	return true;
-//}
-
 bool BSTree::remove(const int data) {
-    // careful of mem leak here
+    LeafNode* found = findNode(rootPtr->leftChild, data);
+    //If the value is not in the tree then return false
+    if (!found) return false;
+
+    //Traverse tree until you find target node
+    //When traversing make sure to keep track of parent node as well
+    //
 	return true;
 }
 
@@ -344,10 +311,12 @@ void BSTree::clear() {
 
 int BSTree::getEntry(const int anEntry) {
 	return 0;
+	
 }
 
 bool BSTree::contains(const int anEntry) const {
-	return true;
+    //Return true if findNode returns a ptr and false if returns nullptr
+    return (findNode(rootPtr->leftChild, anEntry) != nullptr) ? true : false;
 }
 
 void BSTree::preorderTrav(void visit(int&)) const {

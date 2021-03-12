@@ -32,7 +32,7 @@ void test2() {
 void testConstructors(){
     //works
     BSTree defaultTree();
-    //works but does not mark leafs yet
+    //works
     BSTree arrayTree(10);
     //works
     BSTree copyTree(arrayTree);
@@ -41,8 +41,26 @@ void testConstructors(){
 }
 void testAdd() {
     BSTree BST1(5);
-    BST1.add(12);
-    BST1.add(25);
+    assert(BST1.add(12));   //Test adding
+    assert(BST1.add(25));   //Test linking to newly added number
+    assert(BST1.add(11));   //Test linking to newly added number
+    assert(BST1.add(-12));  //Test negative number
+}
+void testContains() {
+    BSTree BST1(10);
+    assert(BST1.contains(3));   //Test contains and return false
+    assert(!BST1.contains(12)); //Test contains and return false
+    assert(!BST1.contains(0));  //Test avoiding dummy node
+
+    assert(BST1.add(14));       //Add new node 
+    assert(BST1.contains(14));  //Test contains on new node
+    assert(BST1.add(-122));     //Add new negative node
+    assert(BST1.contains(-122));//Test contains on new negative node]
+    assert(BST1.add(12));       //Add new node in between
+    assert(BST1.contains(12));  //Test contains on new node that is not largest
+    
+
+    //Add tests for contains after removal
 }
 
 int main() {
@@ -50,7 +68,11 @@ int main() {
     // test1();
     //int a = 5;
     testConstructors();
+    cout << "Test Constructors Passed" << endl;
     testAdd();
+    cout << "Test Add Passed" << endl;
+    testContains();
+    cout << "Test Contains Passed" << endl;
 
     cout << "Done!" << endl;
     return 0;
