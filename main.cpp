@@ -122,6 +122,18 @@ void testTraversal() {
 
     cout << "Test Traversal Passed" << endl;
 }
+
+void assignmentTest() {
+    //Create tree with 20 nodes
+    int size = 20;
+    BSTree myTree(size);
+    //Delete only the even nodes
+    for (int i = 2; i <= size; i+=2) {
+        myTree.remove(i);
+    }
+    string str = myTree.inorderTrav();
+    assert(str == "1 3 5 7 9 11 13 15 17 19 ");
+}
 int main() {
     cout << "Begin Testing!" << endl << endl;
     // test1();
@@ -136,6 +148,8 @@ int main() {
     cout << endl;
     testTraversal();
     cout << endl;
+    cout << "************BEGIN ASSIGNMENT REQUIRED TEST************" << endl;
+    assignmentTest();
     cout << "Done!" << endl;
     return 0;
 }

@@ -394,10 +394,10 @@ void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
     LeafNode* successor = inorderSuccessor(ptr);
     LeafNode* predecessor = inorderPredecessor(ptr);
     
-    if (!ptr->lThread) {
+    if (ptr->lThread) {
         predecessor->rightChild = successor;
     }
-    else if (!ptr->rThread) successor->leftChild = predecessor;
+    else if (ptr->rThread) successor->leftChild = predecessor;
     
     delete ptr;
 }
