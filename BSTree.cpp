@@ -299,29 +299,30 @@ BSTree::BSTree(const BSTree* aTree) {
 // Preconditon:
 // Postcondition: 
 BSTree::~BSTree() {
-    
-    LeafNode* del;
-    LeafNode* trav = rootPtr->leftChild;
-    // traverse tree
-    // delete nodes individually 
-    // until I hit the left most leaf keep looping
-    while (trav->lThread) {
-        trav = trav->leftChild;        
-    }
-    // while trav isnt root keep looping
-    while (trav != rootPtr) {
-        del = trav;
-        cout << " " << del->data;
-        trav = trav->rightChild;
-        //del = nullptr;
-        //delete del->leftChild;
-        //delete del->rightChild;
-        //delete del;
-    }
-    cout << endl;
-    
-
-    
+    clear(rootPtr);
+//    
+//    LeafNode* del;
+//    LeafNode* trav = rootPtr->leftChild;
+//    // traverse tree
+//    // delete nodes individually 
+//    // until I hit the left most leaf keep looping
+//    while (trav->lThread) {
+//        trav = trav->leftChild;        
+//    }
+//    // while trav isnt root keep looping
+//    while (trav != rootPtr) {
+//        del = trav;
+//        cout << " " << del->data;
+//        trav = trav->rightChild;
+//        //del = nullptr;
+//        //delete del->leftChild;
+//        //delete del->rightChild;
+//        //delete del;
+//    }
+//    cout << endl;
+//    
+//
+//    
 }
 
 
@@ -548,8 +549,42 @@ void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
 // Preconditon:
 // Postcondition: 
 void BSTree::clear(LeafNode* trav) {
-    //
-    if (trav != rootPtr) {
+    //trav is the most left node
+    if(rootPtr->leftChild!=rootPtr){
+        LeafNode* ptr;
+        ptr = rootPtr->leftChild;
+        while (ptr->lThread) {
+            ptr = ptr->leftChild;
+        }
+        LeafNode* deleteNode = ptr;
+        while (ptr != rootPtr) {
+            
+            ptr = inorderSuccessor(ptr);
+            delete deleteNode;
+            deleteNode = nullptr;
+            
+        }
+    }
+    delete rootPtr;
+    rootPtr = nullptr;
+   
+    //while (trav->lThread) {
+    //    trav = trav->leftChild;
+    //}
+    ////Now trav is the most left node
+    //bool hitRoot = false;
+    //while (trav != rootPtr) {
+    //    trav = inorderSuccessor(trav);
+    //    LeafNode* previous = inorderPredecessor(trav);
+    //    previous = nullptr;
+    //    delete previous;
+    //    delete trav->leftChild;
+    //}
+
+
+
+
+    /*if (trav != rootPtr) {
         if (trav->lThread) {
             clear(trav->leftChild);
         }
@@ -559,7 +594,7 @@ void BSTree::clear(LeafNode* trav) {
         cout << " " << trav->data; 
         trav = nullptr;
         delete trav;
-    }
+    }*/
     //
     /*
     // go to left most node
