@@ -5,12 +5,15 @@
 */
 
 // testing gitHub
-// should test for duplicates because duplicates not allowed
 #include <iostream>
 #include "BSTree.h"
 #include <cassert>
 using namespace std;
 
+
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void test1() {
     cout << "Hello" << endl << endl;
 }
@@ -25,6 +28,10 @@ void testConstructors(){
     cout << "Test Constructors Passed" << endl << endl;
     
 }
+
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void testAdd() {
     BSTree BST1(5);
     assert(BST1.add(12));   //Test adding
@@ -39,6 +46,10 @@ void testAdd() {
     //Make sure to use findNode to test if the threads work
     cout << "Test Add Passed" << endl << endl;
 }
+
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void testContains() {
     BSTree BST1(10);
     assert(BST1.contains(3));   //Test contains and return false
@@ -60,6 +71,9 @@ void testContains() {
     //Add tests for contains after removal
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void testRemove() {
     BSTree BST1(10);
     assert(BST1.remove(2));        //Test remove
@@ -73,6 +87,9 @@ void testRemove() {
     cout << "Test Remove Passed" << endl << endl;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void testTraversal() {
     
     BSTree BST1(5);                             
@@ -109,6 +126,9 @@ void testTraversal() {
     cout << "Test Traversal Passed" << endl << endl;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void assignmentTest() {
     //Create tree with 20 nodes
     int size = 40;
@@ -123,6 +143,9 @@ void assignmentTest() {
     cout << "Assignment Test Passed" << endl << endl;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void testOutStream() {
     BSTree BST1(8); 
     //
@@ -133,6 +156,9 @@ void testOutStream() {
     cout << "Ostream Test Passed" << endl << endl;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 int main() {
     cout << "Begin Testing!" << endl << endl;
     // test1();

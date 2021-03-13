@@ -13,7 +13,9 @@
 using namespace std;
 
 
-
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 ostream& operator<<(ostream& out, const BSTree& tree) {
     BSTree newTree(tree);
     out << newTree.inorderTrav();
@@ -38,48 +40,76 @@ ostream& operator<<(ostream& out, const BSTree& tree) {
 
 // LeafNode Public:
 
-// constructor
+// 
+// Purpose: constructor
+// Preconditon:
+// Postcondition: 
 LeafNode::LeafNode() : leftChild{ nullptr }, rightChild{ nullptr }, lThread{ false }, 
 rThread{ false }
 {}
 
-// constructor with data input
+// Purpose: constructor with data input
+// Preconditon:
+// Postcondition: 
 LeafNode::LeafNode(const int& newData) : data{newData}, leftChild{nullptr}, 
     rightChild{nullptr}, lThread{ false }, rThread{ false }
 {}
 
 //constructure with all variables argument
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 LeafNode::LeafNode(const int& newData, LeafNode* leftPtr, LeafNode* rightPtr) : 
     data{newData}, leftChild{leftPtr}, rightChild{rightPtr}, lThread{ false }, rThread{ false }
 {}
 
-
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void LeafNode::setData(const int& newData) {
     data = newData;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 int LeafNode::getData() {
     return data;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 auto LeafNode::getLeftChildPtr() const {
     return leftChild;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 auto LeafNode::getRightChildPtr() const {
     return rightChild;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void LeafNode::setLeftChild(LeafNode* leftLeaf) {
     leftChild = leftLeaf;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void LeafNode::setRightChild(LeafNode* rightLeaf) {
     rightChild = rightLeaf;
 }
 
 //BSTree protected
 // goes through the tree and returns the height of the longest branch
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
     if (!subTreePtr->lThread || !subTreePtr->rThread) return 0;
     
@@ -105,6 +135,9 @@ string BSTree::toStringTree() {
 }
 */
 // toString given a level
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 string BSTree::toStringGivenLevel(LeafNode* root, int level, string strLevel) {
     //cout << "here now";
     if (root == rootPtr) return strLevel;
@@ -117,6 +150,9 @@ string BSTree::toStringGivenLevel(LeafNode* root, int level, string strLevel) {
     return strLevel;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
     if (subTreePtr == nullptr) return 0;
     int counter = 0;
@@ -129,6 +165,9 @@ int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
     return counter + 1;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
     if (treePtr->data == target) return treePtr;
     //If there is nowhere to go then we have hit the bottom and have not found node.
@@ -142,6 +181,9 @@ LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
     return nullptr;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     if (oldTreeRootPtr == nullptr) return nullptr;
     LeafNode* temp;
@@ -167,11 +209,17 @@ void BSTree::postorder(void visit(int), LeafNode* treePtr) {
 
 //BSTree public
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 BSTree::BSTree() {
     //In the case of empty, root will be a dummy node
     rootPtr = new LeafNode();
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 BSTree::BSTree(const int data) {
    //This method will add all values from 1 - data into BSTree
 
@@ -193,6 +241,9 @@ BSTree::BSTree(const int data) {
 
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void BSTree::balancedAdd(int start, int end) {
     // maybe check and set leafState in this metho
     if (start > end) return;
@@ -207,6 +258,9 @@ void BSTree::balancedAdd(int start, int end) {
 
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
 
     if (start > end) return NULL;
@@ -226,6 +280,9 @@ LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
     return midNode;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 BSTree::BSTree(const int data, BSTree* leftTreePtr, BSTree* rightTreePtr) {
     rootPtr->data = data;
     rootPtr->leftChild = copyTree(leftTreePtr->rootPtr);
@@ -238,6 +295,9 @@ BSTree::BSTree(const BSTree* aTree) {
 
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 BSTree::~BSTree() {
     
     LeafNode* del;
@@ -266,28 +326,46 @@ BSTree::~BSTree() {
 
 
 //
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 bool BSTree::isEmpty() const {
 	return rootPtr == nullptr; // if root is nullptr then tree is empty
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 int BSTree::getHeight() const {
     return getHeightHelper(rootPtr);
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 int BSTree::getNumOfNodes() const {
     return getNumOfNodesHelper(rootPtr);
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 int BSTree::getRootData() const {
     //Compensate for dummy node
 	return rootPtr->leftChild->data;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void BSTree::setRootData(const int newData) {
     //Compensate for dummy node
     rootPtr->leftChild->data = newData;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 bool BSTree::add(const int newData) {
     LeafNode* tempNode = new LeafNode(newData);
     //first check if tree is empty
@@ -346,6 +424,9 @@ bool BSTree::add(const int newData) {
     }
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 bool BSTree::remove(const int data) {
     //Set parent to dummy node and our pointer to the real root
     LeafNode* parent = rootPtr, *ptr = rootPtr->leftChild;
@@ -396,6 +477,9 @@ bool BSTree::remove(const int data) {
 }
 
 //If target has no children there, only need to reroute parent pointers
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void BSTree::deleteNoChild(LeafNode* ptr, LeafNode* parent) {
     if (ptr == parent->leftChild) {
         //Now the left thread of parent is a thread
@@ -409,6 +493,9 @@ void BSTree::deleteNoChild(LeafNode* ptr, LeafNode* parent) {
     delete ptr;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
     LeafNode* child;
     //Find out whether ptr has right or left child
@@ -435,6 +522,9 @@ void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
     delete ptr;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
     
     LeafNode* successor = ptr->rightChild;
@@ -454,6 +544,9 @@ void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
 
 
 // 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 void BSTree::clear(LeafNode* trav) {
     //
     if (trav != rootPtr) {
@@ -476,7 +569,9 @@ void BSTree::clear(LeafNode* trav) {
     */
 }
 
-
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 LeafNode* BSTree::inorderSuccessor(LeafNode* ptr) {
     //If there is a thread then return the next threaded node
     if (!ptr->rThread) {
@@ -490,6 +585,9 @@ LeafNode* BSTree::inorderSuccessor(LeafNode* ptr) {
     return ptr;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 LeafNode* BSTree::inorderPredecessor(LeafNode* ptr) {
     if (!ptr->lThread) {
         return ptr->leftChild;
@@ -501,11 +599,17 @@ LeafNode* BSTree::inorderPredecessor(LeafNode* ptr) {
     return ptr;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 bool BSTree::contains(const int anEntry) const {
     //Return true if findNode returns a ptr and false if returns nullptr
     return (findNode(rootPtr->leftChild, anEntry) != nullptr) ? true : false;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 string BSTree::inorderTrav() {    
     LeafNode* ptr = rootPtr->leftChild;
     //Go to most left node
@@ -522,6 +626,9 @@ string BSTree::inorderTrav() {
     return traversal;
 }
 
+// Purpose: 
+// Preconditon:
+// Postcondition: 
 BSTree& BSTree::operator= (const BSTree& rightHandSIde) {
     return *this;
 }
