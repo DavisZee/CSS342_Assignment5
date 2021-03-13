@@ -118,7 +118,7 @@ public:
   void setRootData(const int newData);
   bool add(const int newData);
   bool remove(const int data);
-  void clear();
+  void clear(LeafNode* root);
   bool contains(const int anEntry) const;
   // toString by level
   string toStringGivenLevel(LeafNode* root, int level, string strLevel);

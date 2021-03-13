@@ -185,6 +185,12 @@ BSTree::BSTree(const int data) {
     //Call BalancedAdd to add all values into tree in correct order
     balancedAdd(1, data);
     
+    /*
+    cout << "still in destructor: ";
+    clear(rootPtr->leftChild);
+    cout << endl;
+    */
+
 }
 
 void BSTree::balancedAdd(int start, int end) {
@@ -233,6 +239,7 @@ BSTree::BSTree(const BSTree* aTree) {
 }
 
 BSTree::~BSTree() {
+    
     LeafNode* del;
     LeafNode* trav = rootPtr->leftChild;
     // traverse tree
@@ -241,12 +248,20 @@ BSTree::~BSTree() {
     while (trav->lThread) {
         trav = trav->leftChild;        
     }
-    // while the right thread isnt false keep looping
-    while (trav->rThread) {
+    // while trav isnt root keep looping
+    while (trav != rootPtr) {
         del = trav;
+        cout << " " << del->data;
         trav = trav->rightChild;
-        delete del;
+        //del = nullptr;
+        //delete del->leftChild;
+        //delete del->rightChild;
+        //delete del;
     }
+    cout << endl;
+    
+
+    
 }
 
 
@@ -436,9 +451,31 @@ void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
 
     else deleteOneChild(successor, parentSuccessor);
 }
-void BSTree::clear() {
-    
+
+
+// 
+void BSTree::clear(LeafNode* trav) {
+    //
+    if (trav != rootPtr) {
+        if (trav->lThread) {
+            clear(trav->leftChild);
+        }
+        if (trav->rThread) {
+            clear(trav->rightChild);
+        }
+        cout << " " << trav->data; 
+        trav = nullptr;
+        delete trav;
+    }
+    //
+    /*
+    // go to left most node
+    while (trav->lThread) {
+        trav = trav->leftChild;
+    }
+    */
 }
+
 
 LeafNode* BSTree::inorderSuccessor(LeafNode* ptr) {
     //If there is a thread then return the next threaded node
