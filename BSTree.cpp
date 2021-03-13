@@ -44,7 +44,7 @@ ostream& operator<<(ostream& out, const BSTree& tree) {
 // Purpose: constructor
 // Preconditon:
 // Postcondition: 
-LeafNode::LeafNode() : leftChild{ nullptr }, rightChild{ nullptr }, lThread{ false }, 
+LeafNode::LeafNode() : leftChild{ this }, rightChild{ this }, lThread{ true }, 
 rThread{ false }
 {}
 
@@ -225,19 +225,8 @@ BSTree::BSTree(const int data) {
 
     //Dummy node
     rootPtr = new LeafNode();
-    //Link whole tree to be on left of dummy node
-    rootPtr->rThread = true;
-    rootPtr->lThread = false;
-    rootPtr->leftChild = rootPtr;
-    rootPtr->rightChild = rootPtr;
     //Call BalancedAdd to add all values into tree in correct order
     balancedAdd(1, data);
-    
-    /*
-    cout << "still in destructor: ";
-    clear(rootPtr->leftChild);
-    cout << endl;
-    */
 
 }
 
@@ -374,7 +363,7 @@ bool BSTree::add(const int newData) {
         //At this point the tree is empty and only has dummy node
         //Reroute all pointers of root to tempNode
         tempNode->leftChild = rootPtr->leftChild;
-        tempNode->lThread = rootPtr->lThread;
+        tempNode->lThread = false;
         tempNode->rThread = false;
         tempNode->rightChild = rootPtr->rightChild;
         //Insert tempNode into tree
