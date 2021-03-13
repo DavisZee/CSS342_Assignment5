@@ -44,7 +44,7 @@ ostream& operator<<(ostream& out, const BSTree& tree) {
 // Purpose: constructor
 // Preconditon:
 // Postcondition: 
-LeafNode::LeafNode() : leftChild{ this }, rightChild{ this }, lThread{ true }, 
+LeafNode::LeafNode() : leftChild{ this }, rightChild{ this }, lThread{ false }, 
 rThread{ false }
 {}
 
@@ -225,6 +225,9 @@ BSTree::BSTree(const int data) {
 
     //Dummy node
     rootPtr = new LeafNode();
+    // only need to change lThread because rest are 
+    // set to defaults in constructor
+    rootPtr->lThread = true;
     //Call BalancedAdd to add all values into tree in correct order
     balancedAdd(1, data);
 
@@ -240,9 +243,9 @@ void BSTree::balancedAdd(int start, int end) {
     int mid = (start + end) / 2;
 
     add(mid);
-
+    // recursive bottom half
     balancedAdd(start, mid - 1);
-
+    // recursive top half
     balancedAdd( mid + 1, end);
 
 }
@@ -288,7 +291,9 @@ BSTree::BSTree(const BSTree* aTree) {
 // Preconditon:
 // Postcondition: 
 BSTree::~BSTree() {
-    clear(rootPtr);
+    //clear(rootPtr);
+    //delete rootPtr;
+    //rootPtr = nullptr;
 //    
 //    LeafNode* del;
 //    LeafNode* trav = rootPtr->leftChild;
@@ -363,15 +368,13 @@ bool BSTree::add(const int newData) {
         //At this point the tree is empty and only has dummy node
         //Reroute all pointers of root to tempNode
         tempNode->leftChild = rootPtr->leftChild;
-        tempNode->lThread = false;
-        tempNode->rThread = false;
         tempNode->rightChild = rootPtr->rightChild;
         //Insert tempNode into tree
         rootPtr->leftChild = tempNode;
         rootPtr->lThread = true;
         return true;
     }
-    //Tree is not empty so we will have to just add it
+    //Tree is not empty so we will add it
     LeafNode* ptr = new LeafNode();
     //This will avoid the dummy node
     ptr = rootPtr->leftChild;
@@ -384,8 +387,9 @@ bool BSTree::add(const int newData) {
                 tempNode->rightChild = ptr->rightChild;
                 tempNode->rThread = ptr->rThread;
                 tempNode->lThread = false;
-                tempNode->leftChild = ptr;
 
+                //Point to inorder successor 
+                tempNode->leftChild = ptr;
                 ptr->rThread = true;
                 ptr->rightChild = tempNode;
                 return true;
