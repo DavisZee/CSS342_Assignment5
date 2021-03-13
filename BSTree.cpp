@@ -274,12 +274,11 @@ void BSTree::setRootData(const int newData) {
 }
 
 bool BSTree::add(const int newData) {
+    LeafNode* tempNode = new LeafNode(newData);
     //first check if tree is empty
     if ((rootPtr->leftChild == rootPtr) && (rootPtr->rightChild == rootPtr)) {
         //At this point the tree is empty and only has dummy node
-        LeafNode* tempNode = new LeafNode();
         //Reroute all pointers of root to tempNode
-        tempNode->data = newData;
         tempNode->leftChild = rootPtr->leftChild;
         tempNode->lThread = rootPtr->lThread;
         tempNode->rThread = false;
@@ -287,9 +286,6 @@ bool BSTree::add(const int newData) {
         //Insert tempNode into tree
         rootPtr->leftChild = tempNode;
         rootPtr->lThread = true;
-        // clean up tempNode
-        tempNode = nullptr;
-        delete tempNode;
         return true;
     }
     //Tree is not empty so we will have to just add it
@@ -301,7 +297,6 @@ bool BSTree::add(const int newData) {
         if (newData == ptr->data) return false; 
         //Do same thing if it is larger than the current node data
         if (newData > ptr->data) {
-            LeafNode* tempNode = new LeafNode(newData);
             if (ptr->rThread == false) {
                 tempNode->rightChild = ptr->rightChild;
                 tempNode->rThread = ptr->rThread;
@@ -317,7 +312,6 @@ bool BSTree::add(const int newData) {
         
         if (newData < ptr->data) {
             //In this case, we need to navigate left
-            LeafNode* tempNode = new LeafNode(newData);
             if (ptr->lThread == false) {
                 // At this point we know that the leftChild does not 
                 // point to any inorder predecessor. 
