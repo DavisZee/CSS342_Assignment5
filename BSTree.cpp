@@ -306,8 +306,7 @@ BSTree::BSTree(const BSTree* aTree) {
 // Postcondition: 
 BSTree::~BSTree() {
     //clear(rootPtr);
-    //delete rootPtr;
-    //rootPtr = nullptr;
+    
 //    
 //    LeafNode* del;
 //    LeafNode* trav = rootPtr->leftChild;
