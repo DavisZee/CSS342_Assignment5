@@ -389,9 +389,8 @@ bool BSTree::add(const int newData) {
         return true;
     }
     //Tree is not empty so we will add it
-    LeafNode* ptr = new LeafNode();
+    LeafNode* ptr = rootPtr->leftChild;
     //This will avoid the dummy node
-    ptr = rootPtr->leftChild;
     //Keep looping until internally stopped by return
     while (true) {
         if (newData == ptr->data) return false; 
