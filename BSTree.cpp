@@ -13,14 +13,14 @@
 using namespace std;
 
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+// Purpose: << Operator overload of BSTree class.
+// Preconditon: Arguments ostream and BSTree are  not null.
+// Postcondition: String stream of tree is successfully returned.
 ostream& operator<<(ostream& out, const BSTree& tree) {
     BSTree newTree(tree);
     out << newTree.inorderTrav();
 	return out;
-}
+} // end of << op overload
 
 /*
 ostream& operator<<(ostream& out, const BSTree& tree) {
@@ -41,26 +41,29 @@ ostream& operator<<(ostream& out, const BSTree& tree) {
 // LeafNode Public:
 
 // 
-// Purpose: constructor
-// Preconditon:
-// Postcondition: 
+// Purpose: Default no arg constructor of LeafNode.
+// Preconditon: No arguments in object creation.
+// Postcondition: All variables of LeafNode are set to defaults.
 LeafNode::LeafNode() : leftChild{ this }, rightChild{ this }, lThread{ false }, 
 rThread{ false }
 {}
 
-// Purpose: constructor with data input
-// Preconditon:
-// Postcondition: 
+// Purpose: Constructor with data in argument.
+// Preconditon: Integer variable is argument in object creation.
+// Postcondition: LeafNode variables are set to defaults but data is assigned
+//                to newData input.
 LeafNode::LeafNode(const int& newData) : data{newData}, leftChild{nullptr}, 
     rightChild{nullptr}, lThread{ false }, rThread{ false }
 {}
 
-//constructure with all variables argument
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+
+// Purpose: Constructure with all variables argument.
+// Preconditon: Argument has integer and two LeafNode pointers as argument, 
+//              variables are also not null.
+// Postcondition: All variables assigned to corresponding variables in LeafNode
 LeafNode::LeafNode(const int& newData, LeafNode* leftPtr, LeafNode* rightPtr) : 
-    data{newData}, leftChild{leftPtr}, rightChild{rightPtr}, lThread{ false }, rThread{ false }
+    data{newData}, leftChild{leftPtr}, rightChild{rightPtr}, 
+    lThread{ false }, rThread{ false }
 {}
 
 // Purpose: 
@@ -105,9 +108,10 @@ void LeafNode::setRightChild(LeafNode* rightLeaf) {
     rightChild = rightLeaf;
 }
 
-//BSTree protected
-// goes through the tree and returns the height of the longest branch
-// Purpose: 
+// BSTree protected
+
+// Deprecated method not used
+// Purpose: Goes through the tree and returns the height of the longest branch
 // Preconditon:
 // Postcondition: 
 int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
