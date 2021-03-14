@@ -556,6 +556,18 @@ void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
 // Preconditon:
 // Postcondition: 
 void BSTree::clear(LeafNode* trav) {
+
+    if (trav->lThread) {
+            clear(trav->leftChild);
+        }
+    if (trav->rThread) {
+            clear(trav->rightChild);
+    }
+    cout << " " << trav->data; 
+    delete trav;
+    trav = nullptr;
+    
+    /*
     //trav is the most left node
     if(rootPtr->leftChild!=rootPtr){
         LeafNode* ptr;
@@ -574,6 +586,7 @@ void BSTree::clear(LeafNode* trav) {
     }
     delete rootPtr;
     rootPtr = nullptr;
+    */
    
     //while (trav->lThread) {
     //    trav = trav->leftChild;
