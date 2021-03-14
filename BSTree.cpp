@@ -138,10 +138,12 @@ string BSTree::toStringTree() {
     return s;
 }
 */
-// toString given a level
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+// Method not used
+// Purpose: Puts all data in a given level into a string and returns it.
+// Preconditon: LeafNode pointer, integer, and string in argument, must all not
+//              be null, string should be empty "".
+// Postcondition: All data nodes in a specific level of the tree are added to
+//                the string and returned.
 string BSTree::toStringGivenLevel(LeafNode* root, int level, string strLevel) {
     //cout << "here now";
     if (root == rootPtr) return strLevel;
@@ -152,11 +154,11 @@ string BSTree::toStringGivenLevel(LeafNode* root, int level, string strLevel) {
         toStringGivenLevel(root->rightChild, level - 1, strLevel);
     }
     return strLevel;
-}
+} // end of toStringGivenLevel
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+// Purpose: Counts the total number of nodes in the tree.
+// Preconditon: LeafNode pointer is not null.
+// Postcondition: All nodes hit and counted, int value is returned.
 int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
     if (subTreePtr == nullptr) return 0;
     int counter = 0;
@@ -167,11 +169,12 @@ int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
   
     //Return the count (+1 to account for itself)
     return counter + 1;
-}
+} // end of getNumOfNodesHelper
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+// Purpose: Finds a target node in a tree.
+// Preconditon: LeafNode pointer and int target data is not null.
+// Postcondition: Node is either found or not found and a pointer/nullptr is
+//                returned accordingly.
 LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
     if (treePtr->data == target) return treePtr;
     //If there is nowhere to go then we have hit the bottom and have not found node.
@@ -185,9 +188,9 @@ LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
     return nullptr;
 }
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+// Purpose: BSTree constructor that creates a copy of a tree.
+// Preconditon: LeafNode pointer is not a nullptr.
+// Postcondition: Copy of a tree is successfully created.
 LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     if (oldTreeRootPtr == nullptr) return nullptr;
     LeafNode* temp;
@@ -199,6 +202,8 @@ LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     return oldTreeRootPtr;
 }
 
+// Deprecated methods
+/*
 void BSTree::preorder(void visit(int), LeafNode* treePtr) {
 
 }
@@ -210,51 +215,56 @@ void BSTree::inorder(void visit(int), LeafNode* treePtr) {
 void BSTree::postorder(void visit(int), LeafNode* treePtr) {
 
 }
+*/
 
 //BSTree public
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+// Purpose: Default no arg constructor of BSTree.
+// Preconditon: No arguments in object creation of BSTree.
+// Postcondition: A tree with one dummy root node of an empty data
+//                value is created.
 BSTree::BSTree() {
     //In the case of empty, root will be a dummy node
     rootPtr = new LeafNode();
-}
+} // end of BSTree no arg constructor
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+// Purpose: To create a tree with values from 1 to argument integer data value
+//          as nodes in a tree.
+// Preconditon: Argument in object creation is integer value.
+// Postcondition: Tree with nodes from 1 to argument data is created.
 BSTree::BSTree(const int data) {
-   //This method will add all values from 1 - data into BSTree
-
-    //Dummy node
+   // This method will add all values from 1 - data into BSTree
+    // Dummy node creation
     rootPtr = new LeafNode();
     // only need to change lThread because rest are 
     // set to defaults in constructor
     rootPtr->lThread = true;
-    //Call BalancedAdd to add all values into tree in correct order
+    // Call BalancedAdd to add all values into tree in correct order
     balancedAdd(1, data);
 
 }
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+// Purpose: To help add values to a tree in a balanced order, mainly used in
+//          BSTree(int) constructor.
+// Preconditon: Argument call has two integer values, start is not equivalent
+//              to end.
+// Postcondition: Values are added to the tree in a balanced fashion.
 void BSTree::balancedAdd(int start, int end) {
-    // maybe check and set leafState in this metho
+    // Base case: if start is greater than end the tree has added all available
+    // values and should begin returning
     if (start > end) return;
-
+    // find mid point between start and end
     int mid = (start + end) / 2;
-
+    // call add method
     add(mid);
     // recursive bottom half
     balancedAdd(start, mid - 1);
     // recursive top half
     balancedAdd( mid + 1, end);
 
-}
+} // end of balancedAdd
 
-// Purpose: 
+// Purpose: To add a sorted 
 // Preconditon:
 // Postcondition: 
 LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
