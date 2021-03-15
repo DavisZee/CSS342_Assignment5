@@ -155,14 +155,29 @@ void testOutStream() {
     cout << BST2 << endl;
     cout << "Ostream Test Passed" << endl << endl;
 }
-
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+//void ioTrav(LeafNode* node) {
+//    if (node->getData() == 0)
+//        return;
+//    if(node->getLeftChildPtr()->lThread)
+//        ioTrav(node->getLeftChildPtr());
+//    cout << node->getData() << " ";
+//    if(node->getRightChildPtr()->rThread)
+//        ioTrav(node->getRightChildPtr());
+//    
+//
+//}
+//void test() {
+//    BSTree myTree(10);
+//    ioTrav(myTree.rootPtr->getLeftChildPtr());
+//    //myTree.ltorTrav();
+//    //myTree.rToLTrav();
+//}
+//// Purpose: 
+//// Preconditon:
+//// Postcondition: 
 int main() {
     cout << "Begin Testing!" << endl << endl;
-    // test1();
-    //int a = 5;
+        
     testConstructors();
     testAdd();    
     testContains();
@@ -173,5 +188,7 @@ int main() {
     cout << "************BEGIN ASSIGNMENT REQUIRED TEST************" << endl;
     assignmentTest();
     cout << "Done!" << endl;
+    //test();
+   
     return 0;
 }

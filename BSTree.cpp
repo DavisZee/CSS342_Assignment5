@@ -3,7 +3,6 @@
  * Modified by Davis Zhong on 02/26/2021
  * Modified by Affan Dhankwala on 3/3/2021
 */
-
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -184,15 +183,26 @@ LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
 // Purpose: 
 // Preconditon:
 // Postcondition: 
-LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
-    if (oldTreeRootPtr == nullptr) return nullptr;
-    LeafNode* temp;
-    temp = oldTreeRootPtr;
-    temp->leftChild = copyTree(oldTreeRootPtr->leftChild);
-    temp->rightChild = copyTree(oldTreeRootPtr->rightChild);
-    // clean up 
-    delete temp;
-    return oldTreeRootPtr;
+void BSTree::copyTree(LeafNode* oldTreeRootPtr) {
+
+    if (oldTreeRootPtr->data == rootPtr->data)
+        return;
+    add(oldTreeRootPtr->data);
+    
+    if(oldTreeRootPtr->lThread)
+        copyTree(oldTreeRootPtr->leftChild);
+    
+    if (oldTreeRootPtr->rThread)
+        copyTree(oldTreeRootPtr->rightChild);
+   
+    //if (oldTreeRootPtr == nullptr) return nullptr;
+    //LeafNode* temp;
+    //temp = oldTreeRootPtr;
+    //temp->leftChild = copyTree(oldTreeRootPtr->leftChild);
+    //temp->rightChild = copyTree(oldTreeRootPtr->rightChild);
+    //// clean up 
+    //delete temp;
+    //return oldTreeRootPtr;
 }
 
 void BSTree::preorder(void visit(int), LeafNode* treePtr) {
@@ -212,24 +222,29 @@ void BSTree::postorder(void visit(int), LeafNode* treePtr) {
 // Purpose: 
 // Preconditon:
 // Postcondition: 
-BSTree::BSTree() {
-    //In the case of empty, root will be a dummy node
+BSTree::BSTree(){
+   //In the case of empty, root will be a dummy node
+   //Dummy node
     rootPtr = new LeafNode();
+    //Link whole tree to be on left of dummy node
+    rootPtr->rThread = false;
+    rootPtr->lThread = false;
+    rootPtr->leftChild = rootPtr;
+    rootPtr->rightChild = rootPtr;
 }
 
 // Purpose: 
 // Preconditon:
 // Postcondition: 
-BSTree::BSTree(const int data) {
+BSTree::BSTree(const int data) : BSTree() {
    //This method will add all values from 1 - data into BSTree
-
     //Dummy node
-    rootPtr = new LeafNode();
-    //Link whole tree to be on left of dummy node
-    rootPtr->rThread = true;
-    rootPtr->lThread = false;
-    rootPtr->leftChild = rootPtr;
-    rootPtr->rightChild = rootPtr;
+    //rootPtr = new LeafNode();
+    ////Link whole tree to be on left of dummy node
+    //rootPtr->rThread = true;
+    //rootPtr->lThread = false;
+    //rootPtr->leftChild = rootPtr;
+    //rootPtr->rightChild = rootPtr;
     //Call BalancedAdd to add all values into tree in correct order
     balancedAdd(1, data);
     
@@ -280,18 +295,9 @@ LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
     return midNode;
 }
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-BSTree::BSTree(const int data, BSTree* leftTreePtr, BSTree* rightTreePtr) {
-    rootPtr->data = data;
-    rootPtr->leftChild = copyTree(leftTreePtr->rootPtr);
-    rootPtr->rightChild = copyTree(rightTreePtr->rootPtr);
-}
-
-BSTree::BSTree(const BSTree* aTree) {
-    
-    rootPtr = copyTree(aTree->rootPtr);
+BSTree::BSTree(const BSTree& aTree) : BSTree(){
+   
+    copyTree(aTree.rootPtr->leftChild);
 
 }
 
@@ -300,38 +306,14 @@ BSTree::BSTree(const BSTree* aTree) {
 // Postcondition: 
 BSTree::~BSTree() {
     clear(rootPtr);
-//    
-//    LeafNode* del;
-//    LeafNode* trav = rootPtr->leftChild;
-//    // traverse tree
-//    // delete nodes individually 
-//    // until I hit the left most leaf keep looping
-//    while (trav->lThread) {
-//        trav = trav->leftChild;        
-//    }
-//    // while trav isnt root keep looping
-//    while (trav != rootPtr) {
-//        del = trav;
-//        cout << " " << del->data;
-//        trav = trav->rightChild;
-//        //del = nullptr;
-//        //delete del->leftChild;
-//        //delete del->rightChild;
-//        //delete del;
-//    }
-//    cout << endl;
-//    
-//
-//    
 }
-
 
 //
 // Purpose: 
 // Preconditon:
 // Postcondition: 
 bool BSTree::isEmpty() const {
-	return rootPtr == nullptr; // if root is nullptr then tree is empty
+	return (rootPtr->lThread); // if root is nullptr then tree is empty
 }
 
 // Purpose: 
@@ -353,7 +335,8 @@ int BSTree::getNumOfNodes() const {
 // Postcondition: 
 int BSTree::getRootData() const {
     //Compensate for dummy node
-	return rootPtr->leftChild->data;
+    if (!(rootPtr->lThread)) return;
+    return rootPtr->leftChild->data;
 }
 
 // Purpose: 
@@ -361,6 +344,8 @@ int BSTree::getRootData() const {
 // Postcondition: 
 void BSTree::setRootData(const int newData) {
     //Compensate for dummy node
+    
+    if (!(rootPtr->lThread)) return;
     rootPtr->leftChild->data = newData;
 }
 
@@ -547,6 +532,7 @@ void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
 // 
 // Purpose: 
 // Preconditon:
+// Postcondition: 
 // Postcondition: 
 void BSTree::clear(LeafNode* trav) {
     //trav is the most left node

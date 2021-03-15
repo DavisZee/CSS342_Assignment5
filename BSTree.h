@@ -84,7 +84,7 @@ protected:
 
   // copies the tree rooted at treePtr and returns a pointer to the root of
   // the copy. Changed from auto to bool
-  LeafNode* copyTree( LeafNode* oldTreeRootPtr);
+  void copyTree( LeafNode* oldTreeRootPtr);
 
   void deleteNoChild(LeafNode* ptr, LeafNode* parent);
 
@@ -106,7 +106,7 @@ public:
   BSTree();
   BSTree(const int data);
   BSTree(const int data, BSTree* leftTreePtr, BSTree* rightTreePtr);
-  BSTree(const BSTree* aTree);
+  BSTree(const BSTree &aTree);
 
   virtual ~BSTree();
 
