@@ -169,11 +169,10 @@ int main() {
     testContains();
     testRemove();
     testTraversal();
-    assignmentTest();
     testOutStream();
     cout << "************BEGIN ASSIGNMENT REQUIRED TEST************" << endl;
     assignmentTest();
     cout << "Done!" << endl;
-    
+
     return 0;
 } // end of main

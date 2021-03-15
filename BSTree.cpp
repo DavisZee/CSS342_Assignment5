@@ -17,9 +17,15 @@ using namespace std;
 // Preconditon: Arguments ostream and BSTree are  not null.
 // Postcondition: String stream of tree is successfully returned.
 ostream& operator<<(ostream& out, const BSTree& tree) {
+
+    BSTree aTree = tree;
+    return out << aTree.inorder(tree.rootPtr);
+
+    /*
     BSTree newTree(tree);
     out << newTree.inorderTrav();
 	return out;
+    */
 } // end of << op overload
 
 /*
@@ -232,20 +238,27 @@ LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     */
 }
 
-// Deprecated methods
-/*
-void BSTree::preorder(void visit(int), LeafNode* treePtr) {
 
+//void BSTree::preorder(void visit(int), LeafNode* treePtr) {}
+
+string BSTree::inorder(LeafNode* root) {
+    LeafNode* ptr = root->leftChild;
+    //Go to most left node
+    while (ptr->lThread) {
+        ptr = ptr->leftChild;
+    }
+    //At this point we are at the right-most node
+    string traversal = "";
+    //Continue right until we loop back to the dummy node
+    while (ptr != rootPtr) {
+        traversal += to_string(ptr->data) + " ";
+        ptr = inorderSuccessor(ptr);
+    }
+    return traversal;
 }
 
-void BSTree::inorder(void visit(int), LeafNode* treePtr) {
+//void BSTree::postorder(void visit(int), LeafNode* treePtr) {}
 
-}
-
-void BSTree::postorder(void visit(int), LeafNode* treePtr) {
-
-}
-*/
 
 //BSTree public
 
@@ -335,7 +348,7 @@ BSTree::BSTree(const BSTree* aTree) {
 // Preconditon:
 // Postcondition: 
 BSTree::~BSTree() {
-    //clear(rootPtr);
+    clear(rootPtr);
     
 //    
 //    LeafNode* del;
@@ -595,7 +608,7 @@ void BSTree::clear(LeafNode* trav) {
     if (trav->rThread) {
             clear(trav->rightChild);
     }
-    cout << " " << trav->data; 
+    //cout << " " << trav->data; 
     delete trav;
     trav = nullptr;
     
@@ -698,6 +711,10 @@ bool BSTree::contains(const int anEntry) const {
 // Preconditon:
 // Postcondition: 
 string BSTree::inorderTrav() {    
+
+    return inorder(rootPtr);
+
+    /*
     LeafNode* ptr = rootPtr->leftChild;
     //Go to most left node
     while (ptr->lThread) {
@@ -711,6 +728,7 @@ string BSTree::inorderTrav() {
         ptr = inorderSuccessor(ptr);
     }
     return traversal;
+    */
 }
 
 // Purpose: 

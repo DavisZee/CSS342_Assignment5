@@ -97,9 +97,9 @@ protected:
   LeafNode* inorderPredecessor(LeafNode* ptr);
 
   // recursive traversal helper methods, might not be all necessary
-  void preorder(void visit(int), LeafNode* treePtr);
-  void inorder(void visit(int), LeafNode* treePtr);
-  void postorder(void visit(int), LeafNode* treePtr);
+  //void preorder(void visit(int), LeafNode* treePtr);
+  string inorder(LeafNode* treePtr);
+  //void postorder(void visit(int), LeafNode* treePtr);
 
 public:
   // constructor and destructors
