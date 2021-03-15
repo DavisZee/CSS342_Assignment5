@@ -111,7 +111,7 @@ protected:
   //          and thread them accordingly.
   // Preconditon: LeafNodes are not null.
   // Postcondition: Target node deleted and everything is linked properly.
-  void deleteTwoChild(LeafNode* ptr, LeafNode* parent);
+  void deleteTwoChild(LeafNode* ptr);
 
   // Purpose: Looks for the next successor of the target node.
   // Preconditon: LeafNode pointer is not nullptr.

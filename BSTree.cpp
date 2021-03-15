@@ -167,7 +167,7 @@ void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
 //          and thread them accordingly.
 // Preconditon: LeafNodes are not null.
 // Postcondition: Target node deleted and everything is linked properly.
-void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
+void BSTree::deleteTwoChild(LeafNode* ptr) {
     // find the successor nodes for ptr and the parent
     LeafNode* successor = ptr->rightChild;
     LeafNode* parentSuccessor = ptr;
@@ -405,7 +405,7 @@ bool BSTree::remove(const int data) {
     // If ptr has two children, then both threads will be true and we would need to
     // reroute the pointers for both children
     if (ptr->hasRightChild && ptr->hasLeftChild) {
-        deleteTwoChild(ptr, parent);
+        deleteTwoChild(ptr);
     }
     //If ptr only has one child
     else if ((ptr->hasRightChild && !(ptr->hasLeftChild))||(!(ptr->hasRightChild) && (ptr->hasLeftChild))) {
