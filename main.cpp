@@ -18,7 +18,7 @@ using namespace std;
 // Postcondition: Constructors ran, success message printed.
 void testConstructors(){
     //works
-    BSTree defaultTree();
+    BSTree defaultTree;
     //works
     BSTree arrayTree(10);
     //works

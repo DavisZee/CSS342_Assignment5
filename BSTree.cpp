@@ -497,7 +497,7 @@ bool BSTree::remove(const int data) {
         deleteTwoChild(ptr, parent);
     }
     //If ptr only has one child
-    else if (ptr->rThread && !(ptr->lThread)||(!(ptr->rThread) && (ptr->lThread))) {
+    else if ((ptr->rThread && !(ptr->lThread))||(!(ptr->rThread) && (ptr->lThread))) {
         deleteOneChild(ptr, parent);
     }
  
