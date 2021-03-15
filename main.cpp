@@ -167,7 +167,7 @@ int main() {
     testAdd();    
     testContains();
     testRemove();
-    //testTraversal();
+    testTraversal();
     testOutStream();
     cout << "************BEGIN ASSIGNMENT REQUIRED TEST************" << endl;
     assignmentTest();
