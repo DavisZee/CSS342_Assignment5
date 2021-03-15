@@ -20,28 +20,7 @@ ostream& operator<<(ostream& out, const BSTree& tree) {
     BSTree aTree = tree;
     return out << aTree.inorder(tree.rootPtr);
 
-    /*
-    BSTree newTree(tree);
-    out << newTree.inorderTrav();
-	return out;
-    */
 } // end of << op overload
-
-/*
-ostream& operator<<(ostream& out, const BSTree& tree) {
-    BSTree newTree(tree);
-    int height = newTree.getHeightHelper(newTree.rootPtr->leftChild);
-    cout << "height " << height << endl;
-    string strOut = "";
-    for (int i = 1; i <= height; i++) {
-        newTree.toStringGivenLevel(newTree.rootPtr->leftChild, i, strOut);
-        cout << "here: " << i << endl;
-        strOut += "\n";
-    }
-    out << strOut;
-	return out;
-}
-*/
 
 // LeafNode Public:
 
@@ -115,6 +94,8 @@ void LeafNode::setRightChild(LeafNode* rightLeaf) {
 
 // BSTree protected
 
+
+
 // Deprecated method not used
 // Purpose: Goes through the tree and returns the height of the longest branch
 // Preconditon:
@@ -176,6 +157,9 @@ int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
     return counter + 1;
 } // end of getNumOfNodesHelper
 
+
+
+
 // Purpose: Finds a target node in a tree.
 // Preconditon: LeafNode pointer and int target data is not null.
 // Postcondition: Node is either found or not found and a pointer/nullptr is
@@ -207,21 +191,9 @@ void BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     
     if (oldTreeRootPtr->rThread)
         copyTree(oldTreeRootPtr->rightChild);
-   
-    //if (oldTreeRootPtr == nullptr) return nullptr;
-    //LeafNode* temp;
-    //temp = oldTreeRootPtr;
-    //temp->leftChild = copyTree(oldTreeRootPtr->leftChild);
-    //temp->rightChild = copyTree(oldTreeRootPtr->rightChild);
-    //// clean up 
-    //delete temp;
-    //return oldTreeRootPtr;
 }
 
 
-
-
-//void BSTree::preorder(void visit(int), LeafNode* treePtr) {}
 
 string BSTree::inorder(LeafNode* root) {
     LeafNode* ptr = root->leftChild;
@@ -238,8 +210,6 @@ string BSTree::inorder(LeafNode* root) {
     }
     return traversal;
 }
-
-//void BSTree::postorder(void visit(int), LeafNode* treePtr) {}
 
 
 //BSTree public
@@ -262,14 +232,7 @@ BSTree::BSTree(){
 // Preconditon:
 // Postcondition: 
 BSTree::BSTree(const int data) : BSTree() {
-   //This method will add all values from 1 - data into BSTree
-    //Dummy node
-    //rootPtr = new LeafNode();
-    ////Link whole tree to be on left of dummy node
-    //rootPtr->rThread = true;
-    //rootPtr->lThread = false;
-    //rootPtr->leftChild = rootPtr;
-    //rootPtr->rightChild = rootPtr;
+    //This method will add all values from 1 - data into BSTree
     //Call BalancedAdd to add all values into tree in correct order
     balancedAdd(1, data);
 
