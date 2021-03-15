@@ -200,6 +200,36 @@ LeafNode* BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     // clean up 
     delete temp;
     return oldTreeRootPtr;
+
+    /*
+    if (oldTreeRootPtr->lThread) {
+            copyTree(oldTreeRootPtr->leftChild);
+        }
+    if (oldTreeRootPtr->rThread) {
+            copyTree(oldTreeRootPtr->rightChild);
+    }
+    // create a new node object rather than point to old one
+    LeafNode* newRoot = new LeafNode(oldTreeRootPtr->data, 
+    oldTreeRootPtr->leftChild, oldTreeRootPtr->rightChild);
+
+    if (newRoot->leftChild->data == 
+    oldTreeRootPtr->leftChild->data) return newRoot;
+    */
+
+    /*
+    // case of empty root
+    if (oldTreeRootPtr == nullptr) return nullptr;
+
+    // create copy node
+    LeafNode* temp = new LeafNode(oldTreeRootPtr->data);
+    // base case
+    if (oldTreeRootPtr->lThread || oldTreeRootPtr->rThread) return temp;
+
+    temp->leftChild = copyTree(oldTreeRootPtr->leftChild);
+    temp->rightChild = copyTree(oldTreeRootPtr->rightChild);
+
+    return temp;
+    */
 }
 
 // Deprecated methods
@@ -392,7 +422,11 @@ bool BSTree::add(const int newData) {
     //This will avoid the dummy node
     //Keep looping until internally stopped by return
     while (true) {
-        if (newData == ptr->data) return false; 
+        if (newData == ptr->data) {
+            delete tempNode;
+            tempNode = nullptr;
+            return false; 
+        }
         //Do same thing if it is larger than the current node data
         if (newData > ptr->data) {
             if (ptr->rThread == false) {

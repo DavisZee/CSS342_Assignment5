@@ -163,8 +163,7 @@ void testOutStream() {
 //                message printed.
 int main() {
     cout << "Begin Testing!" << endl << endl;
-    // test1();
-    //int a = 5;
+
     testConstructors();
     testAdd();    
     testContains();
@@ -175,5 +174,6 @@ int main() {
     cout << "************BEGIN ASSIGNMENT REQUIRED TEST************" << endl;
     assignmentTest();
     cout << "Done!" << endl;
+    
     return 0;
 } // end of main
