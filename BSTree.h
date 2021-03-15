@@ -47,13 +47,6 @@ public:
   // checks if the node has any children nodes
   bool isLeafNode() const;
 
-  // setters and getters for child pointers
-  auto getLeftChildPtr() const;
-  auto getRightChildPtr() const;
-
-  void setLeftChild(LeafNode* leftLeaf);
-  void setRightChild(LeafNode* rightLeaf);
-
 }; // end of LeafNode
 
 class BSTree {
@@ -96,10 +89,8 @@ protected:
 
   LeafNode* inorderPredecessor(LeafNode* ptr);
 
-  // recursive traversal helper methods, might not be all necessary
-  //void preorder(void visit(int), LeafNode* treePtr);
+  // recursive traversal helper method
   string inorder(LeafNode* treePtr);
-  //void postorder(void visit(int), LeafNode* treePtr);
 
 public:
   // constructor and destructors
@@ -126,9 +117,6 @@ public:
   string toStringTree();
 
   string inorderTrav();
-
-  // overload ops
-  BSTree& operator= (const BSTree& rightHandSIde);
 
 }; // end of BSTree
 
