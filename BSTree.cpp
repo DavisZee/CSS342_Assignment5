@@ -1,7 +1,25 @@
 /*
- * Created on 02/26/2021
- * Modified by Davis Zhong on 02/26/2021
- * Modified by Affan Dhankwala on 3/3/2021
+ * Assignment 5
+ * 
+ * By Davis Zhong
+ * By Affan Dhankwala
+ * 
+ * Due: March 14, 2021
+ * 
+ * This class allows for the creation of a doubly threaded Binary Search 
+ * Tree object and relies on the class of LeafNodes as nodes. It also 
+ * conducts searching, adding, and remove in Olog(N) time complexity 
+ * by comparing only the required nodes. This class has an overloaded ostream
+ * operator to print out any tree's inorder traversal. The traversal's 
+ * time complexity is O(N) because it has to traverse every node and print
+ * its details. The traversal is done solely through treading with no recursion
+ * to backtrack. This class also implements a dummy node to simplify the addition
+ * and removal operations and all of the tree remains on the left side of said
+ * Dummy node. Since the dummy node's default value is 0, this prohibits the 
+ * addition of 0 to our tree. THIS IS A RESTRICTION ON THE TREE. Valgrind and 
+ * Clangtidy have been run on this code and resulted in no memory leakage
+ * and no warnings.
+ * 
 */
 #include <cassert>
 #include <iostream>
@@ -11,25 +29,12 @@
 
 using namespace std;
 
-
-// Purpose: << Operator overload of BSTree class.
-// Preconditon: Arguments ostream and BSTree are  not null.
-// Postcondition: String stream of tree is successfully returned.
-ostream& operator<<(ostream& out, const BSTree& tree) {
-
-    BSTree aTree = tree;
-    return out << aTree.inorder(tree.rootPtr);
-
-} // end of << op overload
-
-// LeafNode Public:
-
-// 
+ 
 // Purpose: Default no arg constructor of LeafNode.
 // Preconditon: No arguments in object creation.
 // Postcondition: All variables of LeafNode are set to defaults.
-LeafNode::LeafNode() : leftChild{ this }, rightChild{ this }, lThread{ false }, 
-rThread{ false }
+LeafNode::LeafNode() : leftChild{ this }, rightChild{ this }, hasLeftChild{ false }, 
+hasRightChild{ false }
 {}
 
 // Purpose: Constructor with data in argument.
@@ -37,163 +42,21 @@ rThread{ false }
 // Postcondition: LeafNode variables are set to defaults but data is assigned
 //                to newData input.
 LeafNode::LeafNode(const int& newData) : data{newData}, leftChild{nullptr}, 
-    rightChild{nullptr}, lThread{ false }, rThread{ false }
+    rightChild{nullptr}, hasLeftChild{ false }, hasRightChild{ false }
 {}
 
+// Purpose: Print out inorder traversal ofBSTree instance to console
+// Precondition: tree is not null
+// Postcondition: Returns ostream out that stores inorder traversal of tree
+ostream& operator<<(ostream& out, const BSTree& tree) {
 
-// Purpose: Constructure with all variables argument.
-// Preconditon: Argument has integer and two LeafNode pointers as argument, 
-//              variables are also not null.
-// Postcondition: All variables assigned to corresponding variables in LeafNode
-LeafNode::LeafNode(const int& newData, LeafNode* leftPtr, LeafNode* rightPtr) : 
-    data{newData}, leftChild{leftPtr}, rightChild{rightPtr}, 
-    lThread{ false }, rThread{ false }
-{}
+    BSTree aTree = tree;
+    return out << aTree.inorder(tree.rootPtr);
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-void LeafNode::setData(const int& newData) {
-    data = newData;
-}
-
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-int LeafNode::getData() {
-    return data;
-}
+} 
+// end of << op overload
 
 // BSTree protected
-
-// Deprecated method not used
-// Purpose: Goes through the tree and returns the height of the longest branch
-// Preconditon:
-// Postcondition: 
-int BSTree::getHeightHelper(LeafNode* subTreePtr) const {
-    if (!subTreePtr->lThread || !subTreePtr->rThread) return 0;
-    
-    int leftHeight = getHeightHelper(subTreePtr->leftChild);
-    int rightHeight = getHeightHelper(subTreePtr->rightChild);
-
-
-    //returns the max of leftHeight and rightHeight (+ 1 to account for itself)
-    return (leftHeight < rightHeight) ? rightHeight + 1: leftHeight + 1;
-}
-
-// Method not used
-// Purpose: Puts all data in a given level into a string and returns it.
-// Preconditon: LeafNode pointer, integer, and string in argument, must all not
-//              be null, string should be empty "".
-// Postcondition: All data nodes in a specific level of the tree are added to
-//                the string and returned.
-string BSTree::toStringGivenLevel(LeafNode* root, int level, string strLevel) {
-    //cout << "here now";
-    if (root == rootPtr) return strLevel;
-    if (level == 1) {
-        strLevel += root->getData();
-    }else if (level > 1) {
-        toStringGivenLevel(root->leftChild, level - 1, strLevel);
-        toStringGivenLevel(root->rightChild, level - 1, strLevel);
-    }
-    return strLevel;
-} // end of toStringGivenLevel
-
-// Purpose: Counts the total number of nodes in the tree.
-// Preconditon: LeafNode pointer is not null.
-// Postcondition: All nodes hit and counted, int value is returned.
-int BSTree::getNumOfNodesHelper(LeafNode* subTreePtr) const {
-    if (subTreePtr == nullptr) return 0;
-    int counter = 0;
-    //Recursively traverse tree going left then right if have those children
-    
-    counter += getNumOfNodesHelper(subTreePtr->leftChild);
-    counter += getNumOfNodesHelper(subTreePtr->rightChild);
-  
-    //Return the count (+1 to account for itself)
-    return counter + 1;
-} // end of getNumOfNodesHelper
-
-
-
-
-// Purpose: Finds a target node in a tree.
-// Preconditon: LeafNode pointer and int target data is not null.
-// Postcondition: Node is either found or not found and a pointer/nullptr is
-//                returned accordingly.
-LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
-    if (treePtr->data == target) return treePtr;
-    //If there is nowhere to go then we have hit the bottom and have not found node.
-    else if (treePtr->rThread == false && treePtr->lThread == false) return nullptr;
-
-    else if (treePtr->data > target) return findNode(treePtr->leftChild, target);
-
-    else if (treePtr->data < target) return findNode(treePtr->rightChild, target);
-
-    //At this point, target was not in the tree and thus return null ptr
-    return nullptr;
-}
-
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-void BSTree::copyTree(LeafNode* oldTreeRootPtr) {
-
-    if (oldTreeRootPtr->data == rootPtr->data)
-        return;
-    add(oldTreeRootPtr->data);
-    
-    if(oldTreeRootPtr->lThread)
-        copyTree(oldTreeRootPtr->leftChild);
-    
-    if (oldTreeRootPtr->rThread)
-        copyTree(oldTreeRootPtr->rightChild);
-}
-
-
-
-string BSTree::inorder(LeafNode* root) {
-    LeafNode* ptr = root->leftChild;
-    //Go to most left node
-    while (ptr->lThread) {
-        ptr = ptr->leftChild;
-    }
-    //At this point we are at the right-most node
-    string traversal = "";
-    //Continue right until we loop back to the dummy node
-    while (ptr != root) {
-        traversal += to_string(ptr->data) + " ";
-        ptr = inorderSuccessor(ptr);
-    }
-    return traversal;
-}
-
-
-//BSTree public
-
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-BSTree::BSTree(){
-   //In the case of empty, root will be a dummy node
-   //Dummy node
-    rootPtr = new LeafNode();
-    //Link whole tree to be on left of dummy node
-    rootPtr->rThread = false;
-    rootPtr->lThread = false;
-    rootPtr->leftChild = rootPtr;
-    rootPtr->rightChild = rootPtr;
-}
-
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-BSTree::BSTree(const int data) : BSTree() {
-    //This method will add all values from 1 - data into BSTree
-    //Call BalancedAdd to add all values into tree in correct order
-    balancedAdd(1, data);
-
-}
 
 // Purpose: To help add values to a tree in a balanced order, mainly used in
 //          BSTree(int) constructor.
@@ -211,31 +74,193 @@ void BSTree::balancedAdd(int start, int end) {
     // recursive bottom half
     balancedAdd(start, mid - 1);
     // recursive top half
-    balancedAdd( mid + 1, end);
+    balancedAdd(mid + 1, end);
 
 } // end of balancedAdd
+// Purpose: Finds a target node in a tree.
+// Preconditon: LeafNode pointer and int target data is not null.
+// Postcondition: Node is either found or not found and a pointer/nullptr is
+//                returned accordingly.
+LeafNode* BSTree::findNode(LeafNode* treePtr, const int target) const {
+    if (treePtr->data == target) return treePtr;
+    //If there is nowhere to go then we have hit the bottom and have not found node.
+    else if (treePtr->hasRightChild == false && treePtr->hasLeftChild == false) return nullptr;
 
-// Purpose: To add a elements of a sorted array into a tree.
-// Preconditon: integer array in argument is not null, integer values
-//              are not null.
-// Postcondition: Array elements are added as nodes in the tree.
-LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
+    else if (treePtr->data > target) return findNode(treePtr->leftChild, target);
 
-    if (start > end) return NULL;
+    else if (treePtr->data < target) return findNode(treePtr->rightChild, target);
 
-    int mid = (start + end) / 2;
+    //At this point, target was not in the tree and thus return null ptr
+    return nullptr;
+}
 
-    //Assign root as middle pointer
-    LeafNode* midNode = new LeafNode(arr[mid - 1]);
+// Purpose: Creates an deep copy of tree
+// Preconditon: oldTreeRootPtr is not nullptr
+// Postcondition: Creates a new instance of tree and is identical copy
+void BSTree::copyTree(LeafNode* oldTreeRootPtr) {
 
+    if (oldTreeRootPtr->data == rootPtr->data)
+        return;
+    add(oldTreeRootPtr->data);
 
-    //Recursively link left and right sides
-    midNode->leftChild = sortedArrToTree(arr, start, mid - 1);
+    if (oldTreeRootPtr->hasLeftChild)
+        copyTree(oldTreeRootPtr->leftChild);
 
-    //Recursively link right side
-    midNode->rightChild = sortedArrToTree(arr, mid + 1, end);   
+    if (oldTreeRootPtr->hasRightChild)
+        copyTree(oldTreeRootPtr->rightChild);
+}
 
-    return midNode;
+// Purpose: To reroute parent pointers if target has no children.
+// Preconditon: LeafNode pointers of parent and ptr are not nullptr.
+// Postcondition: parent pointers are rerouted and target node is deleted.
+void BSTree::deleteNoChild(LeafNode* ptr, LeafNode* parent) {
+    // checks whether the target is the left or right child of the parent
+    if (ptr == parent->leftChild) {
+        //Now the left thread of parent is a thread
+        parent->hasLeftChild = false;
+        parent->leftChild = ptr->leftChild;
+    }
+    else {
+        // linking pointers
+        parent->hasRightChild = false;
+        parent->rightChild = ptr->rightChild;
+    } // end of if
+    // clean up ptr
+    delete ptr;
+    ptr = nullptr;
+} // end of deleteNoChild
+
+// Purpose: To reroute parent pointers if target has a child node.
+// Preconditon: ptr must have a child node, LeafNodes are not nullptr.
+// Postcondition: Child node is deleted and parent pointers are rerouted.
+void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
+    LeafNode* child;
+    // Find out whether ptr has right or left child
+    if (ptr->hasLeftChild) {
+        child = ptr->leftChild;
+    }
+    else {
+        child = ptr->rightChild;
+    } // end if
+
+    // link left/right child accordingly
+    if (ptr == parent->leftChild) {
+        parent->leftChild = child;
+    }
+    else parent->rightChild = child;
+    // end if
+
+    // find successor and predecessor of the ptr node
+    LeafNode* successor = inorderSuccessor(ptr);
+    LeafNode* predecessor = inorderPredecessor(ptr);
+    // link threads together
+    if (ptr->hasLeftChild) {
+        predecessor->rightChild = successor;
+    }
+    else if (ptr->hasRightChild) successor->leftChild = predecessor;
+    // clean up ptr
+    delete ptr;
+    ptr = nullptr;
+} // end of deleteonechild method
+
+// Purpose: To delete a node with two children nodes, link them to the parent,
+//          and thread them accordingly.
+// Preconditon: LeafNodes are not null.
+// Postcondition: Target node deleted and everything is linked properly.
+void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
+    // find the successor nodes for ptr and the parent
+    LeafNode* successor = ptr->rightChild;
+    LeafNode* parentSuccessor = ptr;
+    // traverse as far to the left as possible of the successor
+    while (successor->hasLeftChild) {
+        parentSuccessor = successor;
+        successor = successor->leftChild;
+    } // end of while loop
+    ptr->data = successor->data;
+
+    // checks if successor is a leaf
+    if ((!successor->hasLeftChild) && !(successor->hasRightChild)) deleteNoChild(successor, parentSuccessor);
+
+    else deleteOneChild(successor, parentSuccessor);
+    // end if
+} // end of deleteTwoChild method
+
+// Purpose: Looks for the next successor of the target node.
+// Preconditon: LeafNode pointer is not nullptr.
+// Postcondition: Successor is found and returned.
+LeafNode* BSTree::inorderSuccessor(LeafNode* ptr) {
+    //If there is a thread then return the next threaded node
+    if (!ptr->hasRightChild) {
+        return ptr->rightChild;
+    }
+    //If no thread then inorder successor is the leftmost node of node to right
+    ptr = ptr->rightChild;
+    while (ptr->hasLeftChild) {
+        ptr = ptr->leftChild;
+    }
+    return ptr;
+}
+
+// Purpose: Looks for the predecessor the the target node.
+// Preconditon: LeafNode pointer is not nullptr.
+// Postcondition:  Predecessor is found and returned.
+LeafNode* BSTree::inorderPredecessor(LeafNode* ptr) {
+    if (!ptr->hasLeftChild) {
+        return ptr->leftChild;
+    }
+    ptr = ptr->leftChild;
+    while (ptr->hasRightChild) {
+        ptr = ptr->rightChild;
+    }
+    return ptr;
+}
+
+// Purpose: Conducts inorder traversal of tree and stores all 
+//          node datas in order. 
+// Precondition: BSTree is not null and root is not null
+// Postcondition: Returns string of all nodes in tree
+string BSTree::inorder(LeafNode* root) {
+    LeafNode* ptr = root->leftChild;
+    //Go to most left node
+    while (ptr->hasLeftChild) {
+        ptr = ptr->leftChild;
+    }
+    //At this point we are at the right-most node
+    string traversal = "";
+    //Continue right until we loop back to the dummy node
+    while (ptr != root) {
+        traversal += to_string(ptr->data) + " ";
+        ptr = inorderSuccessor(ptr);
+    }
+    return traversal;
+}
+
+//BSTree public
+
+// Purpose: Create a null instance of BSTree and allocate dummy node
+// Preconditon: None
+// Postcondition: Creates BSTree object with dummy node
+BSTree::BSTree(){
+   //In the case of empty, root will be a dummy node
+   //Dummy node
+    rootPtr = new LeafNode();
+    //Link whole tree to be on left of dummy node
+    rootPtr->hasRightChild = false;
+    rootPtr->hasLeftChild = false;
+    rootPtr->leftChild = rootPtr;
+    rootPtr->rightChild = rootPtr;
+}
+
+// Purpose: Populate the BSTree object with numbers from 1 - data
+//          and ensure a balanced tree. Also call default constructor
+//          to retain dummy node
+// Preconditon: Data > 0
+// Postcondition: Creates BSTree object with n = data nodes
+BSTree::BSTree(const int data) : BSTree() {
+    //This method will add all values from 1 - data into BSTree
+    //Call BalancedAdd to add all values into tree in correct order
+    balancedAdd(1, data);
+
 }
 
 // Purpose: Copy constructor for BSTree.
@@ -244,7 +269,9 @@ LeafNode* BSTree::sortedArrToTree(int arr[], int start, int end) {
 BSTree::BSTree(const BSTree& aTree) : BSTree(){
     // call to helper method that copies the tree
     copyTree(aTree.rootPtr->leftChild);
-} // end of BSTree copy constructor
+} 
+
+// end of BSTree copy constructor
 
 // Purpose: Destructor for BSTree.
 // Preconditon: No arguments.
@@ -254,46 +281,15 @@ BSTree::~BSTree() {
     // calls helper method that traverses tree recursively
     // and deletes all nodes properly
     clear(rootPtr);
-} // end of BSTree destructor
+} 
+
+// end of BSTree destructor
 
 // Purpose: Checks to see if the BSTree is empty.
 // Preconditon: No arguments.
 // Postcondition: boolean value of whether the tree is empty is returned.
 bool BSTree::isEmpty() const {
-	return (rootPtr->lThread); // if root is nullptr then tree is empty
-}
-
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-int BSTree::getHeight() const {
-    return getHeightHelper(rootPtr);
-}
-
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-int BSTree::getNumOfNodes() const {
-    return getNumOfNodesHelper(rootPtr);
-}
-
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-int BSTree::getRootData() const {
-    //Compensate for dummy node
-    if (!(rootPtr->lThread)) return 0;
-    return rootPtr->leftChild->data;
-}
-
-// Purpose: 
-// Preconditon:
-// Postcondition: 
-void BSTree::setRootData(const int newData) {
-    //Compensate for dummy node
-    
-    if (!(rootPtr->lThread)) return;
-    rootPtr->leftChild->data = newData;
+	return (rootPtr->hasLeftChild); // if root is nullptr then tree is empty
 }
 
 // Purpose: To add a new element of int value into the tree as a node.
@@ -310,7 +306,7 @@ bool BSTree::add(const int newData) {
         tempNode->rightChild = rootPtr->rightChild;
         // Insert tempNode into tree
         rootPtr->leftChild = tempNode;
-        rootPtr->lThread = true;
+        rootPtr->hasLeftChild = true;
         return true;
     }
     // Tree is not empty so we will add it
@@ -330,14 +326,14 @@ bool BSTree::add(const int newData) {
         // if value is larger than the current node data then insert or move
         // to the right
         if (newData > ptr->data) {
-            if (!ptr->rThread) {
+            if (!ptr->hasRightChild) {
                 tempNode->rightChild = ptr->rightChild;
-                tempNode->rThread = ptr->rThread;
-                tempNode->lThread = false;
+                tempNode->hasRightChild = ptr->hasRightChild;
+                tempNode->hasLeftChild = false;
 
                 //Point to inorder successor 
                 tempNode->leftChild = ptr;
-                ptr->rThread = true;
+                ptr->hasRightChild = true;
                 ptr->rightChild = tempNode;
                 return true;
             }else ptr = ptr->rightChild;
@@ -345,16 +341,16 @@ bool BSTree::add(const int newData) {
         
         // if value is smaller than current node data then insert or move left
         if (newData < ptr->data) {
-            if (!ptr->lThread) {
+            if (!ptr->hasLeftChild) {
                 // At this point we know that the leftChild does not 
                 // point to any inorder predecessor. 
                 tempNode->leftChild = ptr->leftChild;
-                tempNode->lThread = ptr->lThread;
-                tempNode->rThread = false;
+                tempNode->hasLeftChild = ptr->hasLeftChild;
+                tempNode->hasRightChild = false;
 
                 //Point to inorder successor 
                 tempNode->rightChild = ptr;
-                ptr->lThread = true;
+                ptr->hasLeftChild = true;
                 ptr->leftChild = tempNode;
                 return true;
             }else ptr = ptr->leftChild;
@@ -386,14 +382,14 @@ bool BSTree::remove(const int data) {
         // if data is less than current move left otherwise move right
         if (data < ptr->data){
             // check to see if at a leaf
-            if (ptr->lThread == true) {
+            if (ptr->hasLeftChild == true) {
                 ptr = ptr->leftChild;
             }
             else break;
         }
         else {
             // check to see if at a leaf
-            if (ptr->rThread == true) {
+            if (ptr->hasRightChild == true) {
                 ptr = ptr->rightChild;
             }
             else break;
@@ -408,11 +404,11 @@ bool BSTree::remove(const int data) {
 
     // If ptr has two children, then both threads will be true and we would need to
     // reroute the pointers for both children
-    if (ptr->rThread && ptr->lThread) {
+    if (ptr->hasRightChild && ptr->hasLeftChild) {
         deleteTwoChild(ptr, parent);
     }
     //If ptr only has one child
-    else if ((ptr->rThread && !(ptr->lThread))||(!(ptr->rThread) && (ptr->lThread))) {
+    else if ((ptr->hasRightChild && !(ptr->hasLeftChild))||(!(ptr->hasRightChild) && (ptr->hasLeftChild))) {
         deleteOneChild(ptr, parent);
     }
  
@@ -424,92 +420,15 @@ bool BSTree::remove(const int data) {
 	return true;
 } // end of BSTree remove method
 
-// Purpose: TO reroute parent pointers if target has no children.
-// Preconditon: LeafNode pointers of parent and ptr are not nullptr.
-// Postcondition: parent pointers are rerouted and target node is deleted.
-void BSTree::deleteNoChild(LeafNode* ptr, LeafNode* parent) {
-    // checks whether the target is the left or right child of the parent
-    if (ptr == parent->leftChild) {
-        //Now the left thread of parent is a thread
-        parent->lThread = false;
-        parent->leftChild = ptr->leftChild;
-    }
-    else {
-        // linking pointers
-        parent->rThread = false;
-        parent->rightChild = ptr->rightChild;
-    } // end of if
-    // clean up ptr
-    delete ptr;
-    ptr = nullptr;
-} // end of deleteNoChild
-
-// Purpose: To reroute parent pointers if target has a child node.
-// Preconditon: ptr must have a child node, LeafNodes are not nullptr.
-// Postcondition: Child node is deleted and parent pointers are rerouted.
-void BSTree::deleteOneChild(LeafNode* ptr, LeafNode* parent) {
-    LeafNode* child;
-    // Find out whether ptr has right or left child
-    if (ptr->lThread) {
-        child = ptr->leftChild;
-    }
-    else {
-        child = ptr->rightChild;
-    } // end if
-    
-    // link left/right child accordingly
-    if (ptr == parent->leftChild) {
-        parent->leftChild = child;
-    }
-    else parent->rightChild = child;
-    // end if
-
-    // find successor and predecessor of the ptr node
-    LeafNode* successor = inorderSuccessor(ptr);
-    LeafNode* predecessor = inorderPredecessor(ptr);
-    // link threads together
-    if (ptr->lThread) {
-        predecessor->rightChild = successor;
-    }
-    else if (ptr->rThread) successor->leftChild = predecessor;
-    // clean up ptr
-    delete ptr;
-    ptr = nullptr;
-} // end of deleteonechild method
-
-// Purpose: To delete a node with two children nodes, link them to the parent,
-//          and thread them accordingly.
-// Preconditon: LeafNodes are not null.
-// Postcondition: Target node deleted and everything is linked properly.
-void BSTree::deleteTwoChild(LeafNode* ptr, LeafNode* parent) {
-    // find the successor nodes for ptr and the parent
-    LeafNode* successor = ptr->rightChild;
-    LeafNode* parentSuccessor = ptr;
-    // traverse as far to the left as possible of the successor
-    while (successor->lThread) {
-        parentSuccessor = successor;
-        successor = successor->leftChild;
-    } // end of while loop
-    ptr->data = successor->data;
-    
-    // checks if successor is a leaf
-    if ((!successor->lThread) && !(successor->rThread)) deleteNoChild(successor, parentSuccessor);
-
-    else deleteOneChild(successor, parentSuccessor);
-    // end if
-} // end of deleteTwoChild method
-
-
-// 
 // Purpose: To traverse and delete all nodes in tree.
 // Preconditon: LeafNode pointer is not nullptr.
 // Postcondition: All nodes deleted, tree is empty, no mem leaks.
 void BSTree::clear(LeafNode* trav) {
     // checks if nodes for leaf nodes, if not, recursively traverse and delete
-    if (trav->lThread) {
+    if (trav->hasLeftChild) {
             clear(trav->leftChild);
         }
-    if (trav->rThread) {
+    if (trav->hasRightChild) {
             clear(trav->rightChild);
     }
     
@@ -519,46 +438,18 @@ void BSTree::clear(LeafNode* trav) {
     trav = nullptr;
 } // end of clear method
 
-// Purpose: Looks for the next successor of the target node.
-// Preconditon: LeafNode pointer is not nullptr.
-// Postcondition: Successor is found and returned.
-LeafNode* BSTree::inorderSuccessor(LeafNode* ptr) {
-    //If there is a thread then return the next threaded node
-    if (!ptr->rThread) {
-        return ptr->rightChild;
-    }
-    //If no thread then inorder successor is the leftmost node of node to right
-    ptr = ptr->rightChild;
-    while (ptr->lThread) {
-        ptr = ptr->leftChild;
-    }
-    return ptr;
-}
 
-// Purpose: Looks for the predecessor the the target node.
-// Preconditon: LeafNode pointer is not nullptr.
-// Postcondition:  Predecessor is found and returned.
-LeafNode* BSTree::inorderPredecessor(LeafNode* ptr) {
-    if (!ptr->lThread) {
-        return ptr->leftChild;
-    }
-    ptr = ptr->leftChild;
-    while (ptr->rThread) {
-        ptr = ptr->rightChild;
-    }
-    return ptr;
-}
 
-// Purpose: 
-// Preconditon:
-// Postcondition: 
+// Purpose: Return a boolean indicating if a target Entry is present
+// Preconditon: BSTree object cannot be null
+// Postcondition: Returns boolean indicating if target found
 bool BSTree::contains(const int anEntry) const {
     //Return true if findNode returns a ptr and false if returns nullptr
     return (findNode(rootPtr->leftChild, anEntry) != nullptr) ? true : false;
 }
 
 // Purpose: Traverse threaded binary search tree in order.
-// Preconditon: No arguments in parameter.
+// Preconditon: BSTree object cannot be null
 // Postcondition: Tree is traversed in order and a string of data in order is
 //                returned.
 string BSTree::inorderTrav() {    

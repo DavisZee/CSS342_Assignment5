@@ -1,31 +1,22 @@
 /*
- * Created on 02/26/2021
- * Modified by Davis Zhong on 02/26/2021
+ * Assignment 5
+ *
+ * By Davis Zhong
+ * By Affan Dhankwala
+ *
+ * Due: March 14, 2021
+ *
+ * This class conducts intensive tests to our BSTree class to validate its methods.
+ * Each method's purpose, precondition, and postcondition can be seem before it
+ * to understand the reason for the method's existence. The final main method
+ * calls all the test methods and will terminate if any of them fail. 
  * 
-*/
+ */
 
-// testing gitHub
 #include <iostream>
 #include "BSTree.h"
 #include <cassert>
 using namespace std;
-
-
-
-// Purpose: Tests basic constructors of the BSTree class.
-// Preconditon: Requires no arguments, assumes the class is included
-//              and the class constructors are available.
-// Postcondition: Constructors ran, success message printed.
-void testConstructors(){
-    //works
-    BSTree defaultTree;
-    //works
-    BSTree arrayTree(10);
-    // works
-    BSTree copyTree(arrayTree);
-    cout << "Test Constructors Passed" << endl << endl;
-    
-} // end of testConstructors
 
 // Purpose: Tests the success of the add methods of the BSTree class.
 // Preconditon: No arguments required.
@@ -150,25 +141,22 @@ void assignmentTest() {
 // Postcondition: Success fully prints out the tree in order.
 void testOutStream() {
     BSTree BST1(8); 
-    //
-    // testing my << operator
-    //
     cout << BST1 << endl;
     cout << "Ostream Test Passed" << endl << endl;
 }
 
-// Purpose: Main method.
-// Preconditon: No arguments required.
+// Purpose: Main method calls all methods
+// Preconditon: None
 // Postcondition: All tests that are called passes, successful execution
-//                message printed.
+//                message printed. Returns 0
 int main() {
     cout << "Begin Testing!" << endl << endl;
-    testConstructors();
     testAdd();    
     testContains();
     testRemove();
     testTraversal();
     testOutStream();
+    cout << endl;       //Extra space for clarity
     cout << "************BEGIN ASSIGNMENT REQUIRED TEST************" << endl;
     assignmentTest();
     cout << "Done!" << endl;
