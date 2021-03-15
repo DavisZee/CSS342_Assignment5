@@ -232,7 +232,7 @@ string BSTree::inorder(LeafNode* root) {
     //At this point we are at the right-most node
     string traversal = "";
     //Continue right until we loop back to the dummy node
-    while (ptr != rootPtr) {
+    while (ptr != root) {
         traversal += to_string(ptr->data) + " ";
         ptr = inorderSuccessor(ptr);
     }

@@ -134,13 +134,14 @@ void assignmentTest() {
     //Create tree with 20 nodes
     int size = 40;
     BSTree myTree(size);
+    BSTree copyTree(myTree);
     //Delete only the even nodes
     for (int i = 2; i <= size; i+=2) {
-        myTree.remove(i);
+        copyTree.remove(i);
     }
-    string str = myTree.inorderTrav();
+    string str = copyTree.inorderTrav();
     assert(str == "1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 ");
-    
+    cout << copyTree << endl;
     cout << "Assignment Test Passed" << endl << endl;
 }
 
@@ -162,8 +163,6 @@ void testOutStream() {
 //                message printed.
 int main() {
     cout << "Begin Testing!" << endl << endl;
-    // test1();
-    //int a = 5;
     testConstructors();
     testAdd();    
     testContains();
