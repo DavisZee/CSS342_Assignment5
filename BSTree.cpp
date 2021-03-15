@@ -218,9 +218,7 @@ void BSTree::copyTree(LeafNode* oldTreeRootPtr) {
     //return oldTreeRootPtr;
 }
 
-void BSTree::preorder(void visit(int), LeafNode* treePtr) {
 
-}
 
 
 //void BSTree::preorder(void visit(int), LeafNode* treePtr) {}
@@ -382,7 +380,7 @@ int BSTree::getNumOfNodes() const {
 // Postcondition: 
 int BSTree::getRootData() const {
     //Compensate for dummy node
-    if (!(rootPtr->lThread)) return;
+    if (!(rootPtr->lThread)) return 0;
     return rootPtr->leftChild->data;
 }
 

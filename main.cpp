@@ -171,7 +171,7 @@ int main() {
     //testTraversal();
     testOutStream();
     cout << "************BEGIN ASSIGNMENT REQUIRED TEST************" << endl;
-    //assignmentTest();
+    assignmentTest();
     cout << "Done!" << endl;
 
     return 0;
